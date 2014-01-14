@@ -26,3 +26,11 @@ git@github.com:3dev/autostop.git
 cd web
 npm install
 ```
+
+Запустите приложение:
+
+```
+grunt
+```
+
+и перейдите в браузере на [http://localhost:3000](http://localhost:3000)
