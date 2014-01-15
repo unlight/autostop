@@ -2,7 +2,7 @@
 
 (function() {
     // Articles Controller Spec
-    describe('MEAN controllers', function() {
+    describe('Autostop controllers', function() {
         describe('ArticlesController', function() {
             // The $resource service augments the response object with methods for updating and deleting the resource.
             // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -18,7 +18,7 @@
             });
 
             // Load the controllers module
-            beforeEach(module('mean'));
+            beforeEach(module('autostop'));
 
             // Initialize the controller and a mock scope
             var ArticlesController,
@@ -51,8 +51,8 @@
 
                     // test expected GET request
                     $httpBackend.expectGET('articles').respond([{
-                        title: 'An Article about MEAN',
-                        content: 'MEAN rocks!'
+                        title: 'An Article about Autostop',
+                        content: 'Autostop rocks!'
                     }]);
 
                     // run controller
@@ -61,8 +61,8 @@
 
                     // test scope value
                     expect(scope.articles).toEqualData([{
-                        title: 'An Article about MEAN',
-                        content: 'MEAN rocks!'
+                        title: 'An Article about Autostop',
+                        content: 'Autostop rocks!'
                     }]);
 
                 });
@@ -75,8 +75,8 @@
                     // fixture response object
                     var testArticleData = function() {
                         return {
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Autostop',
+                            content: 'Autostop rocks!'
                         };
                     };
 
@@ -99,8 +99,8 @@
                     // fixture expected POST data
                     var postArticleData = function() {
                         return {
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Autostop',
+                            content: 'Autostop rocks!'
                         };
                     };
 
@@ -108,14 +108,14 @@
                     var responseArticleData = function() {
                         return {
                             _id: '525cf20451979dea2c000001',
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            title: 'An Article about Autostop',
+                            content: 'Autostop rocks!'
                         };
                     };
 
                     // fixture mock form input values
-                    scope.title = 'An Article about MEAN';
-                    scope.content = 'MEAN rocks!';
+                    scope.title = 'An Article about Autostop';
+                    scope.content = 'Autostop rocks!';
 
                     // test post request is sent
                     $httpBackend.expectPOST('articles', postArticleData()).respond(responseArticleData());
@@ -138,8 +138,8 @@
                 var putArticleData = function() {
                     return {
                         _id: '525a8422f6d0f87f0e407a33',
-                        title: 'An Article about MEAN',
-                        to: 'MEAN is great!'
+                        title: 'An Article about Autostop',
+                        to: 'Autostop is great!'
                     };
                 };
 
@@ -156,8 +156,8 @@
                 //$httpBackend.expectPUT(/articles\/([0-9a-fA-F]{24})$/, putArticleData()).respond();
                 /*
                 Error: Expected PUT /articles\/([0-9a-fA-F]{24})$/ with different data
-                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!"}
-                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!","updated":[1383534772975]}
+                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about Autostop","to":"Autostop is great!"}
+                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about Autostop","to":"Autostop is great!","updated":[1383534772975]}
                 */
 
                 // run controller

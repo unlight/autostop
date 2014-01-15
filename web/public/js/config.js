@@ -1,7 +1,7 @@
 'use strict';
 
 //Setting up route
-angular.module('mean').config(['$routeProvider',
+angular.module('autostop').config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
         when('/articles', {
@@ -26,7 +26,7 @@ angular.module('mean').config(['$routeProvider',
 ]);
 
 //Setting HTML5 Location Mode
-angular.module('mean').config(['$locationProvider',
+angular.module('autostop').config(['$locationProvider',
     function($locationProvider) {
         $locationProvider.hashPrefix('!');
     }
