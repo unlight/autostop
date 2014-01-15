@@ -27,7 +27,7 @@ describe('<Unit Test>', function() {
                 password: 'password'
             });
 
-            done();
+            User.remove({}, done);
         });
 
         describe('Method Save', function() {
