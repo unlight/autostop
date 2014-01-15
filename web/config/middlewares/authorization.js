@@ -33,3 +33,21 @@ exports.article = {
         next();
     }
 };
+
+exports.route = {
+    hasAuthorization: function(req, res, next) {
+        if (req.routeparam.creator.id != req.user.id) {
+            return res.send(401, 'User is not authorized');
+        }
+        next();
+    }
+};
+
+exports.trip = {
+    hasAuthorization: function(req, res, next) {
+        if (req.trip.creator.id != req.user.id) {
+            return res.send(401, 'User is not authorized');
+        }
+        next();
+    }
+};

@@ -72,6 +72,25 @@ module.exports = function(app, passport, auth) {
     //Finish with setting up the articleId param
     app.param('articleId', articles.article);
 
+    //Route Routes
+    var routes = require('../app/controllers/routes');
+    app.get('/routes', routes.search);
+    app.post('/routes', auth.requiresLogin, routes.create);
+    app.get('/routes/:routeId', routes.show);
+    app.put('/routes/:routeId', auth.requiresLogin, auth.route.hasAuthorization, routes.update);
+    app.del('/routes/:routeId', auth.requiresLogin, auth.route.hasAuthorization, routes.deactivate);
+    app.param('routeId', routes.route);
+
+    var trips = require('../app/controllers/trips');
+    app.get('/trips', trips.search);
+    app.post('/trips', auth.requiresLogin, trips.create);
+    app.get('/trips/:tripId', trips.show);
+    app.put('/trips/:tripId', auth.requiresLogin, auth.trip.hasAuthorization, trips.update);
+    app.post('/trips/:tripId/cancel', auth.requiresLogin, auth.trip.hasAuthorization, trips.deactivate);
+    app.post('/trips/:tripId/join', auth.requiresLogin, trips.join);
+    app.post('/trips/:tripId/leave', auth.requiresLogin, trips.leave);
+    app.param('tripId', trips.trip);
+
     //Home route
     var index = require('../app/controllers/index');
     app.get('/', index.render);
