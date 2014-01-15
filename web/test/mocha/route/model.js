@@ -1,3 +1,5 @@
+'use strict';
+
 /*jshint expr: true*/
 require('../../../server');
 
@@ -6,8 +8,7 @@ var should = require('should'),
     mongoose = require('mongoose'),
     mock = require('../mock'),
     _ = require('underscore'),
-    Route = mongoose.model('Route'),
-    User = mongoose.model('User');
+    Route = mongoose.model('Route');
 
 var user;
 var route;

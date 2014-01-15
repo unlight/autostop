@@ -1,23 +1,8 @@
+'use strict';
+
 var _ = require('underscore'),
     uuid = require('node-uuid'),
     mongoose = require('mongoose');
-
-
-exports.user = function (source) {
-    return _.extend(user(), source);
-};
-
-exports.route = function (source) {
-    return _.extend(route(), source);
-};
-
-exports.trip = function (source) {
-    return _.extend(trip(), source);
-};
-
-exports.location = function (source) {
-    return _.extend(location(), source);
-};
 
 function user() {
     var User = mongoose.model('User');
@@ -51,14 +36,14 @@ function trip() {
     });
 }
 
-function location() {
-    var Location = mongoose.model('Location');
+exports.user = function (source) {
+    return _.extend(user(), source);
+};
 
-    return new Location({
-        title: 'Location Title',
-        point: {
-            type: 'Point',
-            coordinates: [ 10, 10 ]
-        }
-    });
-}
+exports.route = function (source) {
+    return _.extend(route(), source);
+};
+
+exports.trip = function (source) {
+    return _.extend(trip(), source);
+};

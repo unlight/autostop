@@ -1,3 +1,5 @@
+'use strict';
+
 /*jshint expr: true*/
 require('../../../server');
 
@@ -71,7 +73,7 @@ describe('Model Trip', function () {
                 saveRouteB: function (callback) {
                     route.save(callback);
                 },
-                saveTrip: function (callback) {
+                saveTrip: function () {
                     trip.save(function (err) {
                         should.exist(err);
                         done();

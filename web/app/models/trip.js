@@ -1,10 +1,11 @@
+'use strict';
+
 require('./user');
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     ObjectId = mongoose.Types.ObjectId,
-    Route = mongoose.model('Route'),
-    User = mongoose.model('User');
+    Route = mongoose.model('Route');
 
 var TripSchema = new Schema({
     route: {
@@ -100,7 +101,7 @@ TripSchema.statics.search = function (searchData, callback) {
 
     if (searchData.startMin) {
         criteria.start = {
-            "$gte": new Date(searchData.startMin)
+            '$gte': new Date(searchData.startMin)
         };
     }
 
