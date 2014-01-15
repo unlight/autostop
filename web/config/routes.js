@@ -74,25 +74,29 @@ module.exports = function(app, passport, auth) {
 
     //Route Routes
     var routes = require('../app/controllers/routes');
-    app.get('/routes', routes.search);
-    app.post('/routes', auth.requiresLogin, routes.create);
-    app.get('/routes/:routeId', routes.show);
-    app.put('/routes/:routeId', auth.requiresLogin, auth.route.hasAuthorization, routes.update);
-    app.del('/routes/:routeId', auth.requiresLogin, auth.route.hasAuthorization, routes.deactivate);
+    app.get(apiUri('/routes'), routes.search);
+    app.post(apiUri('/routes'), auth.requiresLogin, routes.create);
+    app.get(apiUri('/routes/:routeId'), routes.show);
+    app.put(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routes.update);
+    app.del(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routes.deactivate);
     app.param('routeId', routes.route);
 
     var trips = require('../app/controllers/trips');
-    app.get('/trips', trips.search);
-    app.post('/trips', auth.requiresLogin, trips.create);
-    app.get('/trips/:tripId', trips.show);
-    app.put('/trips/:tripId', auth.requiresLogin, auth.trip.hasAuthorization, trips.update);
-    app.post('/trips/:tripId/cancel', auth.requiresLogin, auth.trip.hasAuthorization, trips.deactivate);
-    app.post('/trips/:tripId/join', auth.requiresLogin, trips.join);
-    app.post('/trips/:tripId/leave', auth.requiresLogin, trips.leave);
+    app.get(apiUri('/trips'), trips.search);
+    app.post(apiUri('/trips'), auth.requiresLogin, trips.create);
+    app.get(apiUri('/trips/:tripId'), trips.show);
+    app.put(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, trips.update);
+    app.post(apiUri('/trips/:tripId/cancel'), auth.requiresLogin, auth.trip.hasAuthorization, trips.deactivate);
+    app.post(apiUri('/trips/:tripId/join'), auth.requiresLogin, trips.join);
+    app.post(apiUri('/trips/:tripId/leave'), auth.requiresLogin, trips.leave);
     app.param('tripId', trips.trip);
 
-    //Home route
+    //Home routes
     var index = require('../app/controllers/index');
+    app.get(apiUri(), index.api);
     app.get('/', index.render);
-
 };
+
+function apiUri(uri) {
+    return '/api' + (uri || '');
+}
