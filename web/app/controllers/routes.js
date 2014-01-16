@@ -11,7 +11,6 @@ var mongoose = require('mongoose'),
  */
 exports.create = function (req, res) {
     var route = new Route(req.body);
-    console.log('req.user=', req.user);
     route.creator = req.user;
 
     route.save(function (err) {
