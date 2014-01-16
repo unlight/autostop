@@ -63,6 +63,8 @@ module.exports = function(app, passport, auth) {
 
     var usersApi = require('../app/api/users');
     app.post(apiUri('/users'), usersApi.create);
+    app.get(apiUri('/users'), usersApi.list);
+    app.get(apiUri('/users/:userId'), usersApi.show);
 
     //Article Routes
     var articles = require('../app/controllers/articles');
