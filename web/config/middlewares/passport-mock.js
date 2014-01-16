@@ -5,7 +5,6 @@ var passport = require('passport'),
     ObjectId = mongoose.Types.ObjectId;
 
 passport.use(new StrategyMock({}, function (userId, callback) {
-    console.log('verify function:' + userId);
     if (userId) {
         User.findById(new ObjectId(userId), function (err, user) {
             if (!err && user) {
