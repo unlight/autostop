@@ -5,7 +5,7 @@ var supertest = require('supertest'),
     should = require('should'),
     uuid = require('node-uuid');
 
-describe.only('User service', function () {
+describe('User service', function () {
     describe('Method create', function () {
         it('should create user without problem', function (done) {
             var user = {

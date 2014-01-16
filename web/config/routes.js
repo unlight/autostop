@@ -75,24 +75,23 @@ module.exports = function(app, passport, auth) {
     //Finish with setting up the articleId param
     app.param('articleId', articles.article);
 
-    //Route Routes
-    var routes = require('../app/controllers/routes');
-    app.get(apiUri('/routes'), routes.search);
-    app.post(apiUri('/routes'), auth.requiresLogin, routes.create);
-    app.get(apiUri('/routes/:routeId'), routes.show);
-    app.put(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routes.update);
-    app.del(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routes.deactivate);
-    app.param('routeId', routes.route);
+    var routesApi = require('../app/api/routes');
+    app.get(apiUri('/routes'), routesApi.search);
+    app.post(apiUri('/routes'), auth.requiresLogin, routesApi.create);
+    app.get(apiUri('/routes/:routeId'), routesApi.show);
+    app.put(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routesApi.update);
+    app.del(apiUri('/routes/:routeId'), auth.requiresLogin, auth.route.hasAuthorization, routesApi.deactivate);
+    app.param('routeId', routesApi.route);
 
-    var trips = require('../app/controllers/trips');
-    app.get(apiUri('/trips'), trips.search);
-    app.post(apiUri('/trips'), auth.requiresLogin, trips.create);
-    app.get(apiUri('/trips/:tripId'), trips.show);
-    app.put(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, trips.update);
-    app.post(apiUri('/trips/:tripId/cancel'), auth.requiresLogin, auth.trip.hasAuthorization, trips.deactivate);
-    app.post(apiUri('/trips/:tripId/join'), auth.requiresLogin, trips.join);
-    app.post(apiUri('/trips/:tripId/leave'), auth.requiresLogin, trips.leave);
-    app.param('tripId', trips.trip);
+    var tripsApi = require('../app/api/trips');
+    app.get(apiUri('/trips'), tripsApi.search);
+    app.post(apiUri('/trips'), auth.requiresLogin, tripsApi.create);
+    app.get(apiUri('/trips/:tripId'), tripsApi.show);
+    app.put(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.update);
+    app.post(apiUri('/trips/:tripId/cancel'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.deactivate);
+    app.post(apiUri('/trips/:tripId/join'), auth.requiresLogin, tripsApi.join);
+    app.post(apiUri('/trips/:tripId/leave'), auth.requiresLogin, tripsApi.leave);
+    app.param('tripId', tripsApi.trip);
 
     //Home routes
     var index = require('../app/controllers/index');
