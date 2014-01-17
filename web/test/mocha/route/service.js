@@ -120,7 +120,7 @@ describe('Route service', function () {
     });
 
     describe('PUT /routes/:routeId', function () {
-        it('should updates a route without error', function (done) {
+        it('should update a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
                     var createData = {
@@ -160,7 +160,7 @@ describe('Route service', function () {
             });
         });
 
-        it('should fails to update a route of another user', function (done) {
+        it('should fail to update a route of another user', function (done) {
             async.waterfall([
                 function createRoute(done) {
                     var createData = {
@@ -196,5 +196,75 @@ describe('Route service', function () {
                 }
             ], done);
         })
+    });
+
+    describe('DELETE /routes/:routeId', function () {
+        it('should deactivate route without error', function (done) {
+            async.waterfall([
+                function createRoute(done) {
+                    var createData = {
+                        title: 'Title',
+                        origin: 'Origin',
+                        destination: 'Destination'
+                    };
+
+                    server.post('/api/routes')
+                        .set('userId', userId)
+                        .send(createData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route._id);
+                        });
+                },
+                function deleteRoute(routeId, done) {
+                    server.del('/api/routes/' + routeId)
+                        .set('userId', userId)
+                        .expect(200)
+                        .end(function (err) {
+                            done(err, routeId);
+                        });
+                },
+                function loadRoute(routeId, done) {
+                    server.get('/api/routes/' + routeId)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route);
+                        });
+                }
+            ], function (err, route) {
+                route.active.should.be.false;
+                done(err);
+            });
+        });
+
+        it('should fail to deactivate route of another user', function (done) {
+            async.waterfall([
+                function createRoute(done) {
+                    var createData = {
+                        title: 'Title',
+                        origin: 'Origin',
+                        destination: 'Destination'
+                    };
+
+                    server.post('/api/routes')
+                        .set('userId', userId)
+                        .send(createData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route._id);
+                        });
+                },
+                function deleteRoute(routeId, done) {
+                    server.del('/api/routes/' + routeId)
+                        .set('userId', userBid)
+                        .expect(401)
+                        .end(done);
+                },
+            ], done);
+        });
+
     });
 });
