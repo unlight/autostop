@@ -1,7 +1,7 @@
 'use strict';
 
 var supertest = require('supertest'),
-    server = supertest(require('../../../server.js')),
+    server = supertest(require('../../../server')),
     should = require('should'),
     uuid = require('node-uuid'),
     async = require('async'),
