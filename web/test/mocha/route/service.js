@@ -8,27 +8,52 @@ var supertest = require('supertest'),
 
 describe('Route service', function () {
     var userId;
+    var userBid;
 
     before(function (done) {
-        var userCreateData = {
-            name: 'Name' + uuid.v1(),
-            username: 'username' + uuid.v1(),
-            email: 'email@host.com' + uuid.v1(),
-            password: 'qwerty'
-        };
 
-        server.post('/api/users')
-            .send(userCreateData)
-            .expect(200)
-            .end(function (err, res) {
-                userId = res.body;
-                should.exist(userId);
-                done(err);
-            });
+        async.parallel([
+            function createUser(done) {
+                var createData = {
+                    name: 'Name' + uuid.v1(),
+                    username: 'username' + uuid.v1(),
+                    email: 'email@host.com' + uuid.v1(),
+                    password: 'qwerty'
+                };
+
+                server.post('/api/users')
+                    .send(createData)
+                    .expect(200)
+                    .end(function (err, res) {
+                        var userId = res.body;
+                        done(err, userId);
+                    });
+            },
+            function createUserB(done) {
+                var createData = {
+                    name: 'Name' + uuid.v1(),
+                    username: 'username' + uuid.v1(),
+                    email: 'email@host.com' + uuid.v1(),
+                    password: 'qwerty'
+                };
+
+                server.post('/api/users')
+                    .send(createData)
+                    .expect(200)
+                    .end(function (err, res) {
+                        var userId = res.body;
+                        done(err, userId);
+                    });
+            }
+        ], function (err, results) {
+            userId = results[0];
+            userBid = results[1];
+            done(err);
+        });
     });
 
     describe('POST /routes', function () {
-        it('creates a new route without error', function (done) {
+        it('should create a new route without error', function (done) {
             var createData = {
                 title: 'Title',
                 origin: 'Origin',
@@ -46,7 +71,7 @@ describe('Route service', function () {
                 });
         });
 
-        it('failed to create a route for not authenticated user', function (done) {
+        it('should fail to create a route for not authenticated user', function (done) {
             var createData = {
                 title: 'Title',
                 origin: 'Origin',
@@ -60,9 +85,8 @@ describe('Route service', function () {
         });
     });
 
-
     describe('GET /routes/:routeId', function () {
-        it('retrieves a route without an error', function (done) {
+        it('should retrieve a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
                     var createData = {
@@ -93,5 +117,84 @@ describe('Route service', function () {
                 done(err);
             });
         });
+    });
+
+    describe('PUT /routes/:routeId', function () {
+        it('should updates a route without error', function (done) {
+            async.waterfall([
+                function createRoute(done) {
+                    var createData = {
+                        title: 'Title',
+                        origin: 'Origin',
+                        destination: 'Destination'
+                    };
+
+                    server.post('/api/routes')
+                        .set('userId', userId)
+                        .send(createData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route._id);
+                        });
+                },
+                function updateRoute(routeId, done) {
+                    var updateData = {
+                        title: 'New Title',
+                        origin: 'New Origin',
+                        destination: 'New Destination'
+                    };
+
+                    server.put('/api/routes/' + routeId)
+                        .set('userId', userId)
+                        .send(updateData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route);
+                        });
+                }
+            ], function (err, route) {
+                route.title.should.equal('New Title');
+                done(err);
+            });
+        });
+
+        it('should fails to update a route of another user', function (done) {
+            async.waterfall([
+                function createRoute(done) {
+                    var createData = {
+                        title: 'Title',
+                        origin: 'Origin',
+                        destination: 'Destination'
+                    };
+
+                    server.post('/api/routes')
+                        .set('userId', userId)
+                        .send(createData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route._id);
+                        });
+                },
+                function updateRoute(routeId, done) {
+                    var updateData = {
+                        title: 'New Title',
+                        origin: 'New Origin',
+                        destination: 'New Destination'
+                    };
+
+                    server.put('/api/routes/' + routeId)
+                        .set('userId', userBid)
+                        .send(updateData)
+                        .expect(401)
+                        .end(function (err, res) {
+                            var route = res.body;
+                            done(err, route);
+                        });
+                }
+            ], done);
+        })
     });
 });
