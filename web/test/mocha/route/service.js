@@ -4,79 +4,38 @@ var supertest = require('supertest'),
     server = supertest(require('../../../server')),
     should = require('should'),
     async = require('async'),
-    uuid = require('node-uuid');
+    uuid = require('node-uuid'),
+    service = require('../service-helper')(server);
 
 describe('Route service', function () {
-    var userId;
-    var userBid;
+    var userAId;
+    var userBId;
 
     before(function (done) {
-
         async.parallel([
-            function createUser(done) {
-                var createData = {
-                    name: 'Name' + uuid.v1(),
-                    username: 'username' + uuid.v1(),
-                    email: 'email@host.com' + uuid.v1(),
-                    password: 'qwerty'
-                };
-
-                server.post('/api/users')
-                    .send(createData)
-                    .expect(200)
-                    .end(function (err, res) {
-                        var userId = res.body;
-                        done(err, userId);
-                    });
+            function createUserA(done) {
+                service.user.create(done);
             },
             function createUserB(done) {
-                var createData = {
-                    name: 'Name' + uuid.v1(),
-                    username: 'username' + uuid.v1(),
-                    email: 'email@host.com' + uuid.v1(),
-                    password: 'qwerty'
-                };
-
-                server.post('/api/users')
-                    .send(createData)
-                    .expect(200)
-                    .end(function (err, res) {
-                        var userId = res.body;
-                        done(err, userId);
-                    });
+                service.user.create(done);
             }
         ], function (err, results) {
-            userId = results[0];
-            userBid = results[1];
+            userAId = results[0];
+            userBId = results[1];
             done(err);
         });
     });
 
     describe('POST /routes', function () {
         it('should create a new route without error', function (done) {
-            var createData = {
-                title: 'Title',
-                origin: 'Origin',
-                destination: 'Destination'
-            };
-
-            server.post('/api/routes')
-                .set('userId', userId)
-                .send(createData)
-                .expect(200)
-                .end(function (err, res) {
-                    var route = res.body;
-                    route.creator.should.equal(userId);
-                    done(err);
-                });
+            service.route.create(userAId, function (err, route) {
+                route.creator.should.equal(userAId);
+                done(err);
+            });
         });
 
         it('should fail to create a route for not authenticated user', function (done) {
-            var createData = {
-                title: 'Title',
-                origin: 'Origin',
-                destination: 'Destination'
-            };
+            var createData = service.route.getCreateData();
 
             server.post('/api/routes')
                 .send(createData)
@@ -89,20 +48,9 @@ describe('Route service', function () {
         it('should retrieve a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    var createData = {
-                        title: 'Title',
-                        origin: 'Origin',
-                        destination: 'Destination'
-                    };
-
-                    server.post('/api/routes')
-                        .set('userId', userId)
-                        .send(createData)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route._id);
-                        });
+                    service.route.create(userAId, function (err, route) {
+                        done(err, route._id);
+                    });
                 },
                 function loadRoute(routeId, done) {
                     server.get('/api/routes/' + routeId)
@@ -123,70 +71,34 @@ describe('Route service', function () {
         it('should update a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    var createData = {
-                        title: 'Title',
-                        origin: 'Origin',
-                        destination: 'Destination'
-                    };
-
-                    server.post('/api/routes')
-                        .set('userId', userId)
-                        .send(createData)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route._id);
-                        });
+                    service.route.create(userAId, function (err, route) {
+                        done(err, route._id);
+                    });
                 },
                 function updateRoute(routeId, done) {
-                    var updateData = {
-                        title: 'New Title',
-                        origin: 'New Origin',
-                        destination: 'New Destination'
-                    };
+                    var updateData = service.route.updateData();
 
                     server.put('/api/routes/' + routeId)
-                        .set('userId', userId)
+                        .set('userId', userAId)
                         .send(updateData)
                         .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route);
-                        });
+                        .end(done);
                 }
-            ], function (err, route) {
-                route.title.should.equal('New Title');
-                done(err);
-            });
+            ], done);
         });
 
         it('should fail to update a route of another user', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    var createData = {
-                        title: 'Title',
-                        origin: 'Origin',
-                        destination: 'Destination'
-                    };
-
-                    server.post('/api/routes')
-                        .set('userId', userId)
-                        .send(createData)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route._id);
-                        });
+                    service.route.create(userAId, function (err, route) {
+                        done(err, route._id);
+                    });
                 },
                 function updateRoute(routeId, done) {
-                    var updateData = {
-                        title: 'New Title',
-                        origin: 'New Origin',
-                        destination: 'New Destination'
-                    };
+                    var updateData = service.route.updateData();
 
                     server.put('/api/routes/' + routeId)
-                        .set('userId', userBid)
+                        .set('userId', userBId)
                         .send(updateData)
                         .expect(401)
                         .end(function (err, res) {
@@ -202,24 +114,13 @@ describe('Route service', function () {
         it('should deactivate route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    var createData = {
-                        title: 'Title',
-                        origin: 'Origin',
-                        destination: 'Destination'
-                    };
-
-                    server.post('/api/routes')
-                        .set('userId', userId)
-                        .send(createData)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route._id);
-                        });
+                    service.route.create(userAId, function (err, route) {
+                        done(err, route._id);
+                    });
                 },
                 function deleteRoute(routeId, done) {
                     server.del('/api/routes/' + routeId)
-                        .set('userId', userId)
+                        .set('userId', userAId)
                         .expect(200)
                         .end(function (err) {
                             done(err, routeId);
@@ -242,24 +143,13 @@ describe('Route service', function () {
         it('should fail to deactivate route of another user', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    var createData = {
-                        title: 'Title',
-                        origin: 'Origin',
-                        destination: 'Destination'
-                    };
-
-                    server.post('/api/routes')
-                        .set('userId', userId)
-                        .send(createData)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route._id);
-                        });
+                    service.route.create(userAId, function (err, route) {
+                        done(err, route._id);
+                    });
                 },
                 function deleteRoute(routeId, done) {
                     server.del('/api/routes/' + routeId)
-                        .set('userId', userBid)
+                        .set('userId', userBId)
                         .expect(401)
                         .end(done);
                 },
