@@ -75,7 +75,7 @@ describe('Route service', function () {
                     });
                 },
                 function updateRoute(routeId, done) {
-                    var updateData = service.route.updateData();
+                    var updateData = service.route.getUpdateData();
 
                     server.put('/api/routes/' + routeId)
                         .set('userId', userAId)
@@ -94,7 +94,7 @@ describe('Route service', function () {
                     });
                 },
                 function updateRoute(routeId, done) {
-                    var updateData = service.route.updateData();
+                    var updateData = service.route.getUpdateData();
 
                     server.put('/api/routes/' + routeId)
                         .set('userId', userBId)

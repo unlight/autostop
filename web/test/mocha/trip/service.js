@@ -46,7 +46,7 @@ describe.only('Trip service', function () {
                 });
         });
 
-        it('should fail for not authorized user', function (done) {
+        it('should fail for not authenticated user', function (done) {
             var createData = service.trip.getCreateData({ route: routeA._id});
 
             server.post('/api/routes')
@@ -91,7 +91,6 @@ describe.only('Trip service', function () {
                 function createTrip(done) {
                     service.trip.create(routeA.creator, { route: routeA._id },
                         function (err, trip) {
-                            trip.creator.should.equal(routeA.creator);
                             done(err, trip._id);
                         });
                 },
@@ -109,6 +108,70 @@ describe.only('Trip service', function () {
 
                 done(err);
             });
+        });
+    });
+
+    describe('PUT /trips/:tripId', function () {
+        it('should update trip without error', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            done(err, trip._id);
+                        });
+                },
+                function updateTrip(tripId, done) {
+                    var updateData = service.trip.getUpdateData();
+
+                    server.put('/api/trips/' + tripId)
+                        .set('userId', routeA.creator)
+                        .send(updateData)
+                        .expect(200)
+                        .end(function (err, res) {
+                            done(err, updateData, res.body);
+                        });
+                }],
+                function (err, updateData, trip) {
+                    new Date(trip.start).should.eql(updateData.start);
+                    done(err);
+                });
+        });
+
+        it('should fail if user is not authenticated', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            done(err, trip._id);
+                        });
+                },
+                function updateTrip(tripId, done) {
+                    var updateData = service.trip.getUpdateData();
+
+                    server.put('/api/trips/' + tripId)
+                        .send(updateData)
+                        .expect(401)
+                        .end(done);
+                }], done);
+        });
+
+        it('should fail if current user do not match trip\'s creator', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            done(err, trip._id);
+                        });
+                },
+                function updateTrip(tripId, done) {
+                    var updateData = service.trip.getUpdateData();
+
+                    server.put('/api/trips/' + tripId)
+                        .set('userId', routeB.creator)
+                        .send(updateData)
+                        .expect(401)
+                        .end(done);
+                }], done);
         });
     });
 });

@@ -34,7 +34,7 @@ var ServiceHelper = function (server) {
                 destination: 'Destination'
             };
         },
-        updateData: function () {
+        getUpdateData: function () {
             return {
                 title: 'Title' + uuid.v1(),
                 origin: 'Origin' + uuid.v1(),
@@ -60,6 +60,11 @@ var ServiceHelper = function (server) {
                 start: new Date(),
                 route: defaults.route
             }, defaults);
+        },
+        getUpdateData: function () {
+            return {
+                start: new Date()
+            }
         },
         create: function (userId, defaults, done) {
             var createData = this.getCreateData(defaults);
