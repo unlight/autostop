@@ -3,6 +3,7 @@
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
     should = require('should'),
+    _ = require('underscore'),
     async = require('async'),
     service = require('../service-helper')(server);
 
@@ -38,9 +39,7 @@ describe.only('Trip service', function () {
 
     describe('POST /trips', function () {
         it('should create new trip without error', function (done) {
-            service.trip.create(
-                routeA.creator,
-                { route: routeA._id },
+            service.trip.create(routeA.creator, { route: routeA._id },
                 function (err, trip) {
                     trip.creator.should.equal(routeA.creator);
                     done(err);
@@ -81,6 +80,33 @@ describe.only('Trip service', function () {
                 }
             ], function (err, tripId, trip) {
                 trip._id.should.equal(tripId);
+                done(err);
+            });
+        });
+    });
+
+    describe('GET /trips', function () {
+        it('should retrieve all trips', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            trip.creator.should.equal(routeA.creator);
+                            done(err, trip._id);
+                        });
+                },
+                function loadTrips(tripId, done) {
+                    server.get('/api/trips')
+                        .end(function (err, res) {
+                            done(err, tripId, res.body);
+                        });
+                }
+            ], function (err, tripId, trips) {
+                var trip = _.find(trips, function (trip) {
+                    return trip._id == tripId;
+                });
+                trip.should.be.ok;
+
                 done(err);
             });
         });
