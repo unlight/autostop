@@ -66,4 +66,23 @@ describe.only('Trip service', function () {
                 .end(done);
         });
     });
+
+    describe('GET /trips/:tripId', function () {
+        it('should retrieve trip without error', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id }, done);
+                },
+                function loadTrip(trip, done) {
+                    server.get('/api/trips/' + trip._id)
+                        .end(function (err, res) {
+                            done(err, trip._id, res.body);
+                        });
+                }
+            ], function (err, tripId, trip) {
+                trip._id.should.equal(tripId);
+                done(err);
+            });
+        });
+    });
 });
