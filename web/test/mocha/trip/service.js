@@ -7,7 +7,7 @@ var supertest = require('supertest'),
     async = require('async'),
     service = require('../service-helper')(server);
 
-describe('Trip service', function () {
+describe.only('Trip service', function () {
     var routeA;
     var routeB;
 
@@ -231,6 +231,53 @@ describe('Trip service', function () {
                 function deactivateTrip(tripId, done) {
                     server.del('/api/trips/' + tripId)
                         .set('userId', routeB.creator)
+                        .expect(401)
+                        .end(done);
+                }], done);
+        });
+    });
+
+    describe('POST /trips/:tripId/join', function () {
+        it('should add current user to the list of passengers', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            done(err, trip._id);
+                        });
+                },
+                function joinTrip(tripId, done) {
+                    server.post('/api/trips/' + tripId + '/join')
+                        .set('userId', routeB.creator)
+                        .expect(200)
+                        .end(function (err, res) {
+                            done(err, tripId);
+                        });
+                },
+                function loadTrip(tripId, done) {
+                    server.get('/api/trips/' + tripId)
+                        .expect(200)
+                        .end(function (err, res) {
+                            done(err, res.body);
+                        });
+                }],
+                function (err, trip) {
+                    done(err);
+                    trip.passengers.length.should.equal(1);
+                    trip.passengers[0].should.equal(routeB.creator);
+                });
+        });
+
+        it('should fail for not authenticated request', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator, { route: routeA._id },
+                        function (err, trip) {
+                            done(err, trip._id);
+                        });
+                },
+                function joinTrip(tripId, done) {
+                    server.post('/api/trips/' + tripId + '/join')
                         .expect(401)
                         .end(done);
                 }], done);
