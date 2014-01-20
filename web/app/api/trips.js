@@ -21,10 +21,8 @@ exports.create = function (req, res) {
 
     trip.save(function (err) {
         if (err) {
-            return res.send('users/signup', {
-                errors: err.errors,
-                trip: trip
-            });
+            res.status(401);
+            res.jsonp(err);
         } else {
             res.jsonp(trip);
         }

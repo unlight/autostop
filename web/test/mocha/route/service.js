@@ -4,7 +4,6 @@ var supertest = require('supertest'),
     server = supertest(require('../../../server')),
     should = require('should'),
     async = require('async'),
-    uuid = require('node-uuid'),
     service = require('../service-helper')(server);
 
 describe('Route service', function () {

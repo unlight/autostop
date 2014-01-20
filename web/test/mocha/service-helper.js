@@ -53,6 +53,25 @@ var ServiceHelper = function (server) {
                 });
         }
     };
+
+    this.trip = {
+        getCreateData: function (defaults) {
+            return _.defaults({
+                start: new Date(),
+                route: defaults.route
+            }, defaults);
+        },
+        create: function (userId, defaults, done) {
+            var createData = this.getCreateData(defaults);
+
+            server.post('/api/trips')
+                .set('userId', userId)
+                .send(createData)
+                .end(function (err, res) {
+                    done(err, res.body);
+                });
+        }
+    };
 };
 
 module.exports = function (server) {

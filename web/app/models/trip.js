@@ -58,6 +58,7 @@ TripSchema.path('route').validate(function (route, done) {
         var valid = !err &&
             route && trip.creator &&
             route.creatorId.equals(trip.creatorId);
+
         done(valid);
     });
 }, 'Route is either not exist or do not match this trip.');
