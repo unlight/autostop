@@ -7,34 +7,30 @@ var supertest = require('supertest'),
     async = require('async'),
     service = require('../service-helper')(server);
 
-describe.only('Trip service', function () {
+describe('Trip service', function () {
     var routeA;
-    var routeB;
+    var userBId;
 
     before(function (done) {
         async.parallel([
             function createRouteA(done) {
-                createRoute(done);
+                async.waterfall([
+                    function createUser(done) {
+                        service.user.create(done);
+                    },
+                    function createRoute(userId, done) {
+                        service.route.create(userId, done);
+                    }
+                ], done);
             },
-            function createRouteB(done) {
-                createRoute(done);
+            function createUserB(done) {
+                service.user.create(done);
             }
-        ], function (err, routes) {
-            routeA = routes[0];
-            routeB = routes[1];
+        ], function (err, results) {
+            routeA = results[0];
+            userBId = results[1];
             done(err);
         });
-
-        function createRoute(done) {
-            async.waterfall([
-                function createUser(done) {
-                    service.user.create(done);
-                },
-                function createRouteA(userId, done) {
-                    service.route.create(userId, done);
-                }
-            ], done);
-        }
     });
 
     describe('POST /trips', function () {
@@ -59,7 +55,7 @@ describe.only('Trip service', function () {
             var createData = service.trip.getCreateData({ route: routeA._id});
 
             server.post('/api/trips')
-                .set('userId', routeB.creator)
+                .set('userId', userBId)
                 .send(createData)
                 .expect(401)
                 .end(done);
@@ -167,7 +163,7 @@ describe.only('Trip service', function () {
                     var updateData = service.trip.getUpdateData();
 
                     server.put('/api/trips/' + tripId)
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .send(updateData)
                         .expect(401)
                         .end(done);
@@ -230,7 +226,7 @@ describe.only('Trip service', function () {
                 },
                 function deactivateTrip(tripId, done) {
                     server.del('/api/trips/' + tripId)
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .expect(401)
                         .end(done);
                 }], done);
@@ -248,7 +244,7 @@ describe.only('Trip service', function () {
                 },
                 function joinTrip(tripId, done) {
                     server.post('/api/trips/' + tripId + '/join')
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .expect(200)
                         .end(function (err, res) {
                             done(err, tripId);
@@ -264,7 +260,7 @@ describe.only('Trip service', function () {
                 function (err, trip) {
                     done(err);
                     trip.passengers.length.should.equal(1);
-                    trip.passengers[0].should.equal(routeB.creator);
+                    trip.passengers[0].should.equal(userBId);
                 });
         });
 
@@ -295,7 +291,7 @@ describe.only('Trip service', function () {
                 },
                 function joinTrip(tripId, done) {
                     server.post('/api/trips/' + tripId + '/join')
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .expect(200)
                         .end(function (err, res) {
                             done(err, tripId);
@@ -303,7 +299,7 @@ describe.only('Trip service', function () {
                 },
                 function leaveTrip(tripId) {
                     server.post('/api/trips/' + tripId + '/leave')
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .expect(200)
                         .end(function (err, res) {
                             done(err, tripId);
@@ -332,7 +328,7 @@ describe.only('Trip service', function () {
                 },
                 function joinTrip(tripId, done) {
                     server.post('/api/trips/' + tripId + '/join')
-                        .set('userId', routeB.creator)
+                        .set('userId', userBId)
                         .expect(200)
                         .end(function (err) {
                             done(err, tripId);
