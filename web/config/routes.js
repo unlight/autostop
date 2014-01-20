@@ -90,7 +90,7 @@ module.exports = function(app, passport, auth) {
     app.post(apiUri('/trips'), auth.requiresLogin, tripsApi.create);
     app.get(apiUri('/trips/:tripId'), tripsApi.show);
     app.put(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.update);
-    app.post(apiUri('/trips/:tripId/cancel'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.deactivate);
+    app.del(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.deactivate);
     app.post(apiUri('/trips/:tripId/join'), auth.requiresLogin, tripsApi.join);
     app.post(apiUri('/trips/:tripId/leave'), auth.requiresLogin, tripsApi.leave);
     app.param('tripId', tripsApi.trip);
