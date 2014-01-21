@@ -37,7 +37,8 @@ describe('Trip service', function () {
         it('should create new trip without error', function (done) {
             service.trip.create(routeA.creator, { route: routeA._id },
                 function (err, trip) {
-                    trip.creator.should.equal(routeA.creator);
+                    trip.route._id.should.equal(routeA._id);
+                    trip.creator._id.should.equal(routeA.creator);
                     done(err);
                 });
         });
@@ -129,6 +130,8 @@ describe('Trip service', function () {
                 }],
                 function (err, updateData, trip) {
                     new Date(trip.start).should.eql(updateData.start);
+                    trip.route._id.should.equal(routeA._id);
+                    trip.creator._id.should.equal(routeA.creator);
                     done(err);
                 });
         });

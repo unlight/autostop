@@ -23,8 +23,17 @@ exports.create = function (req, res) {
         if (err) {
             res.status(401);
             res.jsonp(err);
-        } else {
-            res.jsonp(trip);
+        }
+        else {
+            Trip.load(trip._id, function (err, trip) {
+                if (err) {
+                    res.status(500);
+                    res.jsonp(err);
+                }
+                else {
+                    return res.jsonp(trip);
+                }
+            });
         }
     });
 };
