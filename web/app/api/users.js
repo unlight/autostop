@@ -10,30 +10,31 @@ exports.create = function (req, res) {
 
     user.save(function (err) {
         if (err) {
-            return res.json(err);
+            res.jsonp(500, err);
         }
-
-        res.json(user.id);
+        else {
+            res.jsonp(user.id);
+        }
     });
 };
 
-exports.list = function(req, res) {
+exports.list = function (req, res) {
     User.find({}, function (err, users) {
         if (err) {
-            return res.json(err);
+            res.jsonp(500, err);
         }
-
-        res.json(users);
+        else {
+            res.jsonp(users);
+        }
     });
 };
 
 exports.show = function (req, res) {
-    User.findById(new ObjectId(req.params.userId), function(err, user) {
+    User.findById(new ObjectId(req.params.userId), function (err, user) {
         if (err) {
-            res.status(500);
-            return res.json(err);
+            return res.jsonp(500, err);
         }
 
-        return res.json(user);
+        return res.jsonp(user);
     });
 };

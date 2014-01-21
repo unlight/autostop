@@ -7,7 +7,7 @@ var should = require('should'),
     async = require('async'),
     mongoose = require('mongoose'),
     _ = require('underscore'),
-    mock = require('../mock'),
+    entity = require('../entity-helper'),
     Route = mongoose.model('Route'),
     Trip = mongoose.model('Trip'),
     User = mongoose.model('User');
@@ -19,8 +19,8 @@ var trip;
 describe('Model Trip', function () {
 
     before(function (done) {
-        user = mock.user();
-        route = mock.route({ creator: user });
+        user = entity.user();
+        route = entity.route({ creator: user });
 
         async.series({
             saveUser: function (callback) {
@@ -33,7 +33,7 @@ describe('Model Trip', function () {
     });
 
     beforeEach(function (done) {
-        trip = mock.trip({ route: route, creator: user });
+        trip = entity.trip({ route: route, creator: user });
         done();
     });
 
@@ -62,8 +62,8 @@ describe('Model Trip', function () {
         });
 
         it('should fail if trip\'s creator do not match route\'s creator', function (done) {
-            var userB = mock.user();
-            var routeB = mock.route({ creator: userB });
+            var userB = entity.user();
+            var routeB = entity.route({ creator: userB });
             trip.route = routeB;
 
             async.series({
@@ -139,7 +139,7 @@ describe('Model Trip', function () {
 
     describe('Method join', function () {
         it('should be able to join passenger to the trip', function (done) {
-            var userB = mock.user();
+            var userB = entity.user();
 
             async.series({
                 saveUserB: function (callback) {
@@ -159,7 +159,7 @@ describe('Model Trip', function () {
         });
 
         it('should not allow join the passenger twice', function (done) {
-            var userB = mock.user();
+            var userB = entity.user();
 
             async.series({
                 saveUserB: function (callback) {
@@ -191,7 +191,7 @@ describe('Model Trip', function () {
 
     describe('Method leave', function () {
         it('should allow user leaving the trip', function (done) {
-            var userB = mock.user();
+            var userB = entity.user();
 
             async.series({
                 saveUserB: function (callback) {
@@ -219,8 +219,8 @@ describe('Model Trip', function () {
         var tripB;
 
         beforeEach(function (done) {
-            tripA = mock.trip({ creator: user, route: route });
-            tripB = mock.trip({ creator: user, route: route });
+            tripA = entity.trip({ creator: user, route: route });
+            tripB = entity.trip({ creator: user, route: route });
 
             Trip.remove().exec(function (err) {
                 done(err);
@@ -339,8 +339,8 @@ describe('Model Trip', function () {
                             tripA.save(callback);
                         },
                         saveTripB: function (callback) {
-                            var userB = mock.user();
-                            var routeB = mock.route({ creator: userB });
+                            var userB = entity.user();
+                            var routeB = entity.route({ creator: userB });
                             tripB.creator = userB;
                             tripB.route = routeB;
 

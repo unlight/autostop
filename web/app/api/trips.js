@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 exports.search = function (req, res) {
     Trip.search(req.query, function (err, trips) {
         if (err) {
-            res.render('error', { status: 500 });
+            res.jsonp(500, err);
         }
         else {
             res.jsonp(trips);
@@ -21,14 +21,13 @@ exports.create = function (req, res) {
 
     trip.save(function (err) {
         if (err) {
-            res.status(401);
-            res.jsonp(err);
+            ;
+            res.jsonp(401, err);
         }
         else {
             Trip.load(trip._id, function (err, trip) {
                 if (err) {
-                    res.status(500);
-                    res.jsonp(err);
+                    res.jsonp(500, err);
                 }
                 else {
                     return res.jsonp(trip);
@@ -55,7 +54,7 @@ exports.deactivate = function (req, res) {
     var trip = req.trip;
     trip.deactivate(function (err) {
         if (err) {
-            res.render('error', { status: 500 });
+            res.jsonp(500, err);
         }
         else {
             res.jsonp(trip);
@@ -66,18 +65,22 @@ exports.deactivate = function (req, res) {
 exports.join = function (req, res) {
     req.trip.join(req.user._id, function (err) {
         if (err) {
-            return res.render('err', { status: 500 });
+            return res.jsonp(500, err);
         }
-        res.end();
+        else {
+            res.end();
+        }
     });
 };
 
 exports.leave = function (req, res) {
     req.trip.leave(req.user._id, function (err) {
         if (err) {
-            res.render('err', { status: 500 });
+            res.jsonp(500, err);
         }
-        res.end();
+        else {
+            res.end();
+        }
     });
 };
 

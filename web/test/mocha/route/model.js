@@ -6,7 +6,7 @@ require('../../../server');
 var should = require('should'),
     async = require('async'),
     mongoose = require('mongoose'),
-    mock = require('../mock'),
+    entity = require('../entity-helper'),
     _ = require('underscore'),
     Route = mongoose.model('Route');
 
@@ -20,14 +20,14 @@ describe('Model Route:', function () {
                 Route.remove({}, callback);
             },
             createUser: function (callback) {
-                user = mock.user();
+                user = entity.user();
                 user.save(callback);
             }
         }, done);
     });
 
     beforeEach(function (done) {
-        route = mock.route({ creator: user });
+        route = entity.route({ creator: user });
         done();
     });
 
@@ -173,11 +173,11 @@ describe('Model Route:', function () {
                     route.save(callback);
                 },
                 saveUserB: function (callback) {
-                    userB = mock.user();
+                    userB = entity.user();
                     userB.save(callback);
                 },
                 saveRouteB: function (callback) {
-                    routeB = mock.route({ creator: userB });
+                    routeB = entity.route({ creator: userB });
                     routeB.save(callback);
                 },
                 findRoutes: function (callback) {
