@@ -21,12 +21,14 @@ var RouteSchema = new Schema({
     origin: {
         type: String,
         default: '',
-        trim: true
+        trim: true,
+        required: true
     },
     destination: {
         type: String,
         default: '',
-        trim: true
+        trim: true,
+        required: true
     },
     description: {
         type: String,

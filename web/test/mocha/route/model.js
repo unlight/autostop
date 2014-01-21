@@ -46,6 +46,22 @@ describe('Model Route:', function () {
             });
         });
 
+        it('should be able to show an error when try to save without origin', function (done) {
+            route.origin = '';
+            route.save(function (err) {
+                should.exist(err);
+                done();
+            });
+        });
+
+        it('should be able to show an error when try to save without destination', function (done) {
+            route.destination = '';
+            route.save(function (err) {
+                should.exist(err);
+                done();
+            });
+        });
+
         it('should be able to show an error when try to save without user', function (done) {
             route.creator = null;
             route.save(function (err) {

@@ -20,6 +20,8 @@ function route() {
 
     return new Route({
         title: 'Route title',
+        origin: 'Origin',
+        destination: 'Destination',
         creator: user()
     });
 }
