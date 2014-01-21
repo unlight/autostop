@@ -1,7 +1,8 @@
 #Autostop
 
 ## Ресурсы
-[Текущая версия](http://dev-autostop.herokuapp.com)
+* [Текущая версия](http://dev-autostop.herokuapp.com)
+* [Continuous Integration сервер](https://travis-ci.org/3dev/autostop)
 
 ## Установка
 Предварительно необходимо установить:
