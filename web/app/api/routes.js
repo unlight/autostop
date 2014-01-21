@@ -13,7 +13,15 @@ exports.create = function (req, res) {
             return jsonp(500, err);
         }
         else {
-            res.jsonp(route);
+            console.log('route._id:' + route._id);
+            Route.load(route._id, function (err, route) {
+                if (err) {
+                    res.jsonp(500, err);
+                }
+                else {
+                    res.jsonp(route);
+                }
+            });
         }
     });
 };

@@ -58,11 +58,9 @@ RouteSchema.methods.deactivate = function (callback) {
         { $set: { active: false } }, callback);
 };
 
-/**
- * Statics
- */
+
 RouteSchema.statics.load = function (id, cb) {
-    this.findOne({  _id: id })
+    this.findById(id)
         .populate('creator')
         .exec(cb);
 };

@@ -28,7 +28,7 @@ describe('Route service', function () {
     describe('POST /routes', function () {
         it('should create a new route without error', function (done) {
             service.route.create(userAId, function (err, route) {
-                route.creator.should.equal(userAId);
+                route.creator._id.should.equal(userAId);
                 done(err);
             });
         });
@@ -81,9 +81,14 @@ describe('Route service', function () {
                         .set('userId', userAId)
                         .send(updateData)
                         .expect(200)
-                        .end(done);
+                        .end(function (err, res) {
+                            done(err, res.body);
+                        });
                 }
-            ], done);
+            ], function (err, route) {
+                done(err);
+                route.creator._id.should.equal(userAId);
+            });
         });
 
         it('should fail to update a route of another user', function (done) {

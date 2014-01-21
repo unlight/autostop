@@ -35,10 +35,10 @@ describe('Trip service', function () {
 
     describe('POST /trips', function () {
         it('should create new trip without error', function (done) {
-            service.trip.create(routeA.creator, { route: routeA._id },
+            service.trip.create(routeA.creator._id, { route: routeA._id },
                 function (err, trip) {
                     trip.route._id.should.equal(routeA._id);
-                    trip.creator._id.should.equal(routeA.creator);
+                    trip.creator._id.should.equal(routeA.creator._id);
                     done(err);
                 });
         });
@@ -67,7 +67,7 @@ describe('Trip service', function () {
         it('should retrieve trip without error', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id }, done);
+                    service.trip.create(routeA.creator._id, { route: routeA._id }, done);
                 },
                 function loadTrip(trip, done) {
                     server.get('/api/trips/' + trip._id)
@@ -86,7 +86,7 @@ describe('Trip service', function () {
         it('should retrieve all trips', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -112,7 +112,7 @@ describe('Trip service', function () {
         it('should update trip without error', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -121,7 +121,7 @@ describe('Trip service', function () {
                     var updateData = service.trip.getUpdateData();
 
                     server.put('/api/trips/' + tripId)
-                        .set('userId', routeA.creator)
+                        .set('userId', routeA.creator._id)
                         .send(updateData)
                         .expect(200)
                         .end(function (err, res) {
@@ -131,7 +131,7 @@ describe('Trip service', function () {
                 function (err, updateData, trip) {
                     new Date(trip.start).should.eql(updateData.start);
                     trip.route._id.should.equal(routeA._id);
-                    trip.creator._id.should.equal(routeA.creator);
+                    trip.creator._id.should.equal(routeA.creator._id);
                     done(err);
                 });
         });
@@ -139,7 +139,7 @@ describe('Trip service', function () {
         it('should fail if user is not authenticated', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -157,7 +157,7 @@ describe('Trip service', function () {
         it('should fail if current user do not match trip\'s creator', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -178,14 +178,14 @@ describe('Trip service', function () {
         it('should deactivate trip without error', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
                 },
                 function deactivateTrip(tripId, done) {
                     server.del('/api/trips/' + tripId)
-                        .set('userId', routeA.creator)
+                        .set('userId', routeA.creator._id)
                         .expect(200)
                         .end(function (err, res) {
                             done(err, tripId);
@@ -207,7 +207,7 @@ describe('Trip service', function () {
         it('should fail for not authenticated request', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -222,7 +222,7 @@ describe('Trip service', function () {
         it('should fail if current user do not match trip\'s creator', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -240,7 +240,7 @@ describe('Trip service', function () {
         it('should add current user to the list of passengers', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -270,7 +270,7 @@ describe('Trip service', function () {
         it('should fail for not authenticated request', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -287,7 +287,7 @@ describe('Trip service', function () {
         it('should remove current user from the list of passengers', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });
@@ -324,7 +324,7 @@ describe('Trip service', function () {
         it('should fail for not authenticated request', function (done) {
             async.waterfall([
                 function createTrip(done) {
-                    service.trip.create(routeA.creator, { route: routeA._id },
+                    service.trip.create(routeA.creator._id, { route: routeA._id },
                         function (err, trip) {
                             done(err, trip._id);
                         });

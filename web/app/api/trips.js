@@ -21,7 +21,6 @@ exports.create = function (req, res) {
 
     trip.save(function (err) {
         if (err) {
-            ;
             res.jsonp(401, err);
         }
         else {
