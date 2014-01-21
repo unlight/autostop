@@ -10,7 +10,7 @@ var supertest = require('supertest'),
 describe('User service', function () {
     describe('POST /users', function () {
         it('should create user without problem', function (done) {
-            var user = {
+            var createData = {
                 name: 'Name' + uuid.v1(),
                 username: 'username' + uuid.v1(),
                 email: 'email@host.com' + uuid.v1(),
@@ -18,11 +18,13 @@ describe('User service', function () {
             };
 
             server.post('/api/users')
-                .send(user)
+                .send(createData)
                 .expect(200)
                 .end(function(err, res) {
                     done(err);
-                    res.body.should.be.type('string');
+                    var user = res.body;
+                    user._id.should.exist;
+                    user.name.should.equal(createData.name);
                 });
         });
     });
@@ -42,7 +44,7 @@ describe('User service', function () {
         it('should return user by id', function (done) {
             async.waterfall([
                 function createUser (done) {
-                    var user = {
+                    var createData = {
                         name: 'Name' + uuid.v1(),
                         username: 'username' + uuid.v1(),
                         email: 'email@host.com' + uuid.v1(),
@@ -50,23 +52,22 @@ describe('User service', function () {
                     };
 
                     server.post('/api/users')
-                        .send(user)
+                        .send(createData)
                         .expect(200)
                         .end(function(err, res) {
-                            res.body.should.be.type('string');
                             done(err, res.body);
                         });
                 },
-                function loadUser (userId, done) {
-                    server.get('/api/users/' + userId)
+                function loadUser (user, done) {
+                    server.get('/api/users/' + user._id)
                         .expect(200)
                         .end(function(err, res){
-                            done(err, res.body);
+                            done(err, user._id, res.body);
                         });
                 }
-            ], function (err, user) {
+            ], function (err, userId, user) {
                 done(err);
-                user.should.be.type('object');
+                user._id.should.equal(userId);
             });
         });
     });

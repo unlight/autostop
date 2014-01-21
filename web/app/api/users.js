@@ -13,7 +13,14 @@ exports.create = function (req, res) {
             res.jsonp(500, err);
         }
         else {
-            res.jsonp(user.id);
+            return User.findById(user._id, function (err, user) {
+                if (err) {
+                    res.jsonp(500, err);
+                }
+                else {
+                    res.jsonp(user);
+                }
+            });
         }
     });
 };

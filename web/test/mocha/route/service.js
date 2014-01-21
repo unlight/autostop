@@ -19,8 +19,8 @@ describe('Route service', function () {
                 service.user.create(done);
             }
         ], function (err, results) {
-            userAId = results[0];
-            userBId = results[1];
+            userAId = results[0]._id;
+            userBId = results[1]._id;
             done(err);
         });
     });

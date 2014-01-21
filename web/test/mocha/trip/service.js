@@ -18,8 +18,8 @@ describe('Trip service', function () {
                     function createUser(done) {
                         service.user.create(done);
                     },
-                    function createRoute(userId, done) {
-                        service.route.create(userId, done);
+                    function createRoute(user, done) {
+                        service.route.create(user._id, done);
                     }
                 ], done);
             },
@@ -28,7 +28,7 @@ describe('Trip service', function () {
             }
         ], function (err, results) {
             routeA = results[0];
-            userBId = results[1];
+            userBId = results[1]._id;
             done(err);
         });
     });
