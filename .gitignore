@@ -1,4 +1,7 @@
 .DS_Store
 .idea*
+.nodemonignore
 node_modules/
 npm-debug.log
+public/lib
+test/coverage/

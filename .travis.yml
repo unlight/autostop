@@ -3,7 +3,5 @@ node_js:
   - "0.10"
 env:
   - NODE_ENV=travis
-before_install:
-  - cd web
 services:
   - mongodb
