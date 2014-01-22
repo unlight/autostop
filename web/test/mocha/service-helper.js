@@ -64,7 +64,7 @@ var ServiceHelper = function (server) {
         getUpdateData: function () {
             return {
                 start: new Date()
-            }
+            };
         },
         create: function (userId, defaults, done) {
             var createData = this.getCreateData(defaults);

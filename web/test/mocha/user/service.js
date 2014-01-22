@@ -1,8 +1,10 @@
 'use strict';
+/*jshint expr:true*/
+
+require('should');
 
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
-    should = require('should'),
     uuid = require('node-uuid'),
     async = require('async'),
     _ = require('underscore');

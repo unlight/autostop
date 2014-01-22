@@ -1,8 +1,10 @@
 'use strict';
+/*jshint expr:true*/
+
+require('should');
 
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
-    should = require('should'),
     _ = require('underscore'),
     async = require('async'),
     service = require('../service-helper')(server);
@@ -99,7 +101,7 @@ describe('Trip service', function () {
                 }
             ], function (err, tripId, trips) {
                 var trip = _.find(trips, function (trip) {
-                    return trip._id == tripId;
+                    return trip._id === tripId;
                 });
                 trip.should.be.ok;
 
@@ -127,13 +129,13 @@ describe('Trip service', function () {
                         .end(function (err, res) {
                             done(err, updateData, res.body);
                         });
-                }],
-                function (err, updateData, trip) {
-                    new Date(trip.start).should.eql(updateData.start);
-                    trip.route._id.should.equal(routeA._id);
-                    trip.creator._id.should.equal(routeA.creator._id);
-                    done(err);
-                });
+                }
+            ], function (err, updateData, trip) {
+                new Date(trip.start).should.eql(updateData.start);
+                trip.route._id.should.equal(routeA._id);
+                trip.creator._id.should.equal(routeA.creator._id);
+                done(err);
+            });
         });
 
         it('should fail if user is not authenticated', function (done) {
@@ -151,7 +153,8 @@ describe('Trip service', function () {
                         .send(updateData)
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
 
         it('should fail if current user do not match trip\'s creator', function (done) {
@@ -170,7 +173,8 @@ describe('Trip service', function () {
                         .send(updateData)
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
     });
 
@@ -187,7 +191,7 @@ describe('Trip service', function () {
                     server.del('/api/trips/' + tripId)
                         .set('userId', routeA.creator._id)
                         .expect(200)
-                        .end(function (err, res) {
+                        .end(function (err) {
                             done(err, tripId);
                         });
                 },
@@ -197,11 +201,11 @@ describe('Trip service', function () {
                         .end(function (err, res) {
                             done(err, res.body);
                         });
-                }],
-                function (err, trip) {
-                    done(err);
-                    trip.active.should.be.false;
-                });
+                }
+            ], function (err, trip) {
+                done(err);
+                trip.active.should.be.false;
+            });
         });
 
         it('should fail for not authenticated request', function (done) {
@@ -216,7 +220,8 @@ describe('Trip service', function () {
                     server.del('/api/trips/' + tripId)
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
 
         it('should fail if current user do not match trip\'s creator', function (done) {
@@ -232,7 +237,8 @@ describe('Trip service', function () {
                         .set('userId', userBId)
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
     });
 
@@ -249,7 +255,7 @@ describe('Trip service', function () {
                     server.post('/api/trips/' + tripId + '/join')
                         .set('userId', userBId)
                         .expect(200)
-                        .end(function (err, res) {
+                        .end(function (err) {
                             done(err, tripId);
                         });
                 },
@@ -259,8 +265,8 @@ describe('Trip service', function () {
                         .end(function (err, res) {
                             done(err, res.body);
                         });
-                }],
-                function (err, trip) {
+                }
+            ], function (err, trip) {
                     done(err);
                     trip.passengers.length.should.equal(1);
                     trip.passengers[0].should.equal(userBId);
@@ -279,7 +285,8 @@ describe('Trip service', function () {
                     server.post('/api/trips/' + tripId + '/join')
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
     });
 
@@ -296,7 +303,7 @@ describe('Trip service', function () {
                     server.post('/api/trips/' + tripId + '/join')
                         .set('userId', userBId)
                         .expect(200)
-                        .end(function (err, res) {
+                        .end(function (err) {
                             done(err, tripId);
                         });
                 },
@@ -304,7 +311,7 @@ describe('Trip service', function () {
                     server.post('/api/trips/' + tripId + '/leave')
                         .set('userId', userBId)
                         .expect(200)
-                        .end(function (err, res) {
+                        .end(function (err) {
                             done(err, tripId);
                         });
                 },
@@ -314,11 +321,11 @@ describe('Trip service', function () {
                         .end(function (err, res) {
                             done(err, res.body);
                         });
-                }],
-                function (err, trip) {
-                    done(err);
-                    trip.passengers.length.should.equal(0);
-                });
+                }
+            ], function (err, trip) {
+                done(err);
+                trip.passengers.length.should.equal(0);
+            });
         });
 
         it('should fail for not authenticated request', function (done) {
@@ -341,7 +348,8 @@ describe('Trip service', function () {
                     server.post('/api/trips/' + tripId + '/join')
                         .expect(401)
                         .end(done);
-                }], done);
+                }
+            ], done);
         });
     });
 });

@@ -10,7 +10,7 @@ exports.create = function (req, res) {
 
     route.save(function (err) {
         if (err) {
-            return jsonp(500, err);
+            return res.jsonp(500, err);
         }
         else {
             Route.load(route._id, function (err, route) {

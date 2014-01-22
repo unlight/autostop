@@ -1,8 +1,10 @@
 'use strict';
+/*jshint expr: true*/
+
+require('should');
 
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
-    should = require('should'),
     async = require('async'),
     service = require('../service-helper')(server);
 
@@ -111,7 +113,7 @@ describe('Route service', function () {
                         });
                 }
             ], done);
-        })
+        });
     });
 
     describe('DELETE /routes/:routeId', function () {
