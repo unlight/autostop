@@ -5,3 +5,8 @@ env:
   - NODE_ENV=travis
 services:
   - mongodb
+deploy:
+  provider: heroku
+  api_key: "e5415b60-e7e3-466e-8c6e-bf77fd1043ca"
+  app: autostop-dev
+  on: dev
