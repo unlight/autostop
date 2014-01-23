@@ -1,7 +1,7 @@
 #Autostop [![Build Status](https://travis-ci.org/3dev/autostop.png?branch=dev)](https://travis-ci.org/3dev/autostop)
 
 ## Ресурсы
-* [Текущая версия](http://dev-autostop.herokuapp.com)
+* [Текущая версия](http://autostop-dev.herokuapp.com)
 * [Continuous Integration сервер](https://travis-ci.org/3dev/autostop)
 
 ## Установка
