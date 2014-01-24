@@ -10,7 +10,7 @@ var supertest = require('supertest'),
     async = require('async'),
     _ = require('underscore');
 
-describe.only('User service', function () {
+describe('User service', function () {
     describe('POST /users', function () {
         it('should create user without problem', function (done) {
             var createData = {
