@@ -13,6 +13,12 @@ var ServiceHelper = function (server) {
                 password: 'Password'
             }, source);
         },
+        getUpdateData: function () {
+            return {
+                name: 'Username' + uuid.v1(),
+                email: 'Email@host.com' + uuid.v1()
+            };
+        },
         create: function (done) {
             var createData = this.getCreateData();
 

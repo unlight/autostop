@@ -36,6 +36,23 @@ exports.list = function (req, res) {
     });
 };
 
+exports.update = function (req, res) {
+    req.user.update(req.body, function (err) {
+        if (err) {
+            res.jsonp(500, err);
+        }
+        else {
+            User.findById(new ObjectId(req.params.userId), function (err, user) {
+                if (err) {
+                    return res.jsonp(500, err);
+                }
+
+                return res.jsonp(user);
+            });
+        }
+    });
+};
+
 exports.show = function (req, res) {
     User.findById(new ObjectId(req.params.userId), function (err, user) {
         if (err) {
