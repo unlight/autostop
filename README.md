@@ -3,6 +3,7 @@
 ## Ресурсы
 * [Текущая версия](http://autostop-dev.herokuapp.com)
 * [Continuous Integration сервер](https://travis-ci.org/3dev/autostop)
+* [Задачи](https://app.asana.com/0/9761538479759/9761538479763)
 * [Мокапы - мастер](http://ninjamock.com/s/xjgloa)
 
 ## Установка
