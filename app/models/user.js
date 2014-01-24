@@ -20,6 +20,16 @@ var UserSchema = new Schema({
         type: String,
         unique: true
     },
+    car: {
+        required: false,
+        type: {
+            seats: Number,
+            smokingAllowed: Boolean,
+            bodyType: String,
+            color: Number,
+            number: String
+        }
+    },
     hashed_password: String,
     provider: String,
     salt: String,
@@ -127,6 +137,20 @@ UserSchema.methods = {
         var user = this;
         updateData = _.pick(updateData, 'name', 'email');
         _.extend(user, updateData);
+        user.save(done);
+    },
+
+    saveCar: function (saveData, done) {
+        var user = this;
+        saveData = _.pick(saveData, 'seats', 'smokingAllowed', 'bodyType', 'color', 'number');
+        user.car = user.car || {};
+        _.extend(user.car, saveData);
+        user.save(done);
+    },
+
+    deleteCar: function (done) {
+        var user = this;
+        user.car = undefined;
         user.save(done);
     }
 };

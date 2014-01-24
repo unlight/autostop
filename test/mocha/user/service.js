@@ -121,4 +121,36 @@ describe('User service', function () {
             ], done);
         });
     });
+
+//    describe('POST /users/:userId/car', function () {
+//        it('should create new car without error', function (done) {
+//
+//        });
+//
+//        it('should update existing car without error', function (done) {
+//
+//        });
+//
+//        it('should fail for not authenticated user', function (done) {
+//
+//        });
+//
+//        it('should fail for not authorized user', function (done) {
+//
+//        });
+//    });
+
+//    describe('DELETE /users/:userId/car', function () {
+//        it('should delete a car without error', function (done) {
+//
+//        });
+//
+//        it('should fail for not authenticated user', function (done) {
+//
+//        });
+//
+//        it('should fail for not authorized user', function (done) {
+//
+//        });
+//    });
 });
