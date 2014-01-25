@@ -6,19 +6,13 @@ require('should');
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
     service = require('../service-helper')(server),
-    uuid = require('node-uuid'),
     async = require('async'),
     _ = require('underscore');
 
 describe('User service', function () {
     describe('POST /users', function () {
         it('should create user without problem', function (done) {
-            var createData = {
-                name: 'Name' + uuid.v1(),
-                username: 'username' + uuid.v1(),
-                email: 'email@host.com' + uuid.v1(),
-                password: 'qwerty'
-            };
+            var createData = service.user.getCreateData();
 
             server.post('/api/users')
                 .send(createData)
@@ -28,6 +22,22 @@ describe('User service', function () {
                     var user = res.body;
                     user._id.should.exist;
                     user.name.should.equal(createData.name);
+                });
+        });
+
+        it('should be able to create user with car', function (done) {
+            var createData = service.user.getCreateData();
+            createData.car = {
+                seats: 5
+            };
+
+            server.post('/api/users')
+                .send(createData)
+                .expect(200)
+                .end(function (err, res) {
+                    done(err);
+                    var user = res.body;
+                    user.car.seats.should.equal(5);
                 });
         });
     });
