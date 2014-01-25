@@ -9,10 +9,9 @@ var should = require('should'),
     mongoose = require('mongoose'),
     User = mongoose.model('User');
 
-//Globals
 var user, user2;
 
-describe.only('Model User:', function () {
+describe('Model User:', function () {
     beforeEach(function (done) {
         user = new User({
             name: 'Full name',
@@ -38,8 +37,33 @@ describe.only('Model User:', function () {
             });
         });
 
-        it('should be able to save whithout problems', function (done) {
+        it('should be able to save without problems', function (done) {
             user.save(done);
+        });
+
+        it('should be able to save with car property', function (done) {
+            var car = {
+                seats: 5,
+                smokingAllowed: true,
+                bodyType: 'hatch',
+                color: 123,
+                number: 456
+            };
+
+            async.series({
+                createUser: function (done) {
+                    user.car = car;
+                    user.save(done);
+                },
+                loadUser: function (done) {
+                    User.findById(user._id, done);
+                }
+            }, function (err, results) {
+                var user = results.loadUser;
+                user.car.should.eql(car);
+                done(err);
+            });
+
         });
 
         it('should fail to save an existing user again', function (done) {
@@ -84,6 +108,54 @@ describe.only('Model User:', function () {
             });
         });
 
+        it('should be able to update car property', function (done) {
+            var updateData = {
+                car: {
+                    seats: 5
+                }
+            };
+
+            async.series({
+                createUser: function (done) {
+                    user.save(done);
+                },
+                updateUser: function (done) {
+                    user.update(updateData, done);
+                },
+                loadUser: function (done) {
+                    User.findById(user._id, done);
+                }
+            }, function (err, results) {
+                done(err);
+                var user = results.loadUser;
+                user.car.should.eql(updateData.car);
+            });
+        });
+
+        it('should be able to delete car property', function (done) {
+            async.series({
+                createUser: function (done) {
+                    user.car = {
+                        seats: 5
+                    };
+                    user.save(function (err, user) {
+                        user.car.seats.should.equal(5);
+                        done(err);
+                    });
+                },
+                updateUser: function (done) {
+                    user.update({ car: null }, done);
+                },
+                loadUser: function (done) {
+                    User.findById(user._id, done);
+                }
+            }, function (err, results) {
+                done(err);
+                var user = results.loadUser;
+                should.not.exist(user.car);
+            });
+        });
+
         it('should not affect security properties', function (done) {
             var updateData = {
                 name: 'New user name',
@@ -105,88 +177,6 @@ describe.only('Model User:', function () {
                 var updatedUser = results.loadUser;
                 updatedUser.name.should.equal(updateData.name);
                 updatedUser.username.should.equal(user.username);
-            });
-        });
-
-        it('should not affect car property', function (done) {
-            var updateData = {
-                car: {
-                    seats: 5
-                }
-            };
-
-            async.series({
-                createUser: function (done) {
-                    user.save(done);
-                },
-                updateUser: function (done) {
-                    user.update(updateData, done);
-                },
-                loadUser: function (done) {
-                    User.findById(user._id, done);
-                }
-            }, function (err, results) {
-                done(err);
-                var updatedUser = results.loadUser;
-                should.not.exist(updatedUser.car);
-            });
-        });
-    });
-
-    describe('Method update car', function () {
-        it('should update car without error', function (done) {
-            var saveData = {
-                seats: 5,
-                smokingAllowed: true,
-                bodyType: 'hatch',
-                color: 0,
-                number: '123'
-            };
-
-            async.series({
-                createUser: function (done) {
-                    user.save(done);
-                },
-                createCar: function (done) {
-                    user.saveCar(saveData, done);
-                },
-                loadUser: function (done) {
-                    User.findById(user._id, done);
-                }
-            }, function (err, results) {
-                done(err);
-                var user = results.loadUser;
-                user.car.seats.should.equal(saveData.seats);
-                user.car.smokingAllowed.should.equal(saveData.smokingAllowed);
-                user.car.bodyType.should.equal(saveData.bodyType);
-                user.car.color.should.equal(saveData.color);
-                user.car.number.should.equal(saveData.number);
-            });
-        });
-    });
-
-    describe('Method delete car', function () {
-        it('should delete car without error', function (done) {
-            async.series({
-                createUser: function (done) {
-                    user.save(done);
-                },
-                createCar: function (done) {
-                    var saveData = {
-                        seats: 5
-                    };
-                    user.saveCar(saveData, done);
-                },
-                deleteCar: function (done) {
-                    user.deleteCar(done);
-                },
-                loadUser: function (done) {
-                    User.findById(user._id, done);
-                }
-            }, function (err, results) {
-                done(err);
-                var user = results.loadUser;
-                should.not.exist(user.car);
             });
         });
     });

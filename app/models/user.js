@@ -135,7 +135,7 @@ UserSchema.methods = {
 
     update: function (updateData, done) {
         var user = this;
-        updateData = _.pick(updateData, 'name', 'email');
+        updateData = _.pick(updateData, 'name', 'email', 'car');
         _.extend(user, updateData);
         user.save(done);
     },
