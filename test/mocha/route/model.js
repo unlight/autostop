@@ -13,7 +13,7 @@ var should = require('should'),
 var user;
 var route;
 
-describe('Model Route:', function () {
+describe.only('Model Route:', function () {
     before(function (done) {
         async.series({
             removeAllRoutes: function (callback) {
@@ -35,6 +35,19 @@ describe('Model Route:', function () {
         it('should be able to save without problems', function (done) {
             return route.save(function (err) {
                 done(err);
+            });
+        });
+
+        it('should be able to save optional properties', function (done) {
+            route.icon = 'Icon';
+            route.seats = 5;
+            route.start = new Date(1, 1, 1, 18, 55);
+
+            route.save(function (err, route) {
+                done(err);
+                route.icon.should.equal('Icon');
+                route.seats.should.equal(5);
+                route.start.should.eql(new Date(1, 1, 1, 18, 55));
             });
         });
 

@@ -35,6 +35,15 @@ var RouteSchema = new Schema({
         default: '',
         trim: true
     },
+    icon: {
+        type: String
+    },
+    seats: {
+        type: Number
+    },
+    start: {
+        type: Date
+    },
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User',
