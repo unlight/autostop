@@ -45,6 +45,75 @@ describe('Route service', function () {
         });
     });
 
+    describe('GET /routes', function () {
+        it('should sort routes by creation date descending by default', function (done) {
+            async.series({
+                createRoutes: function (done) {
+                    async.parallel([
+                        function createRouteA(done) {
+                            service.route.create(userAId, done);
+                        },
+                        function createRouteB(done) {
+                            setTimeout(function () {
+                                service.route.create(userAId, done);
+                            }, 1000);
+                        }
+                    ], done);
+                },
+                findRoutes: function (done) {
+                    server.get('/api/routes')
+                        .expect(200)
+                        .end(function (err, res) {
+                            done(err, res.body);
+                        });
+                }
+            }, function (err, results) {
+                done(err);
+                var routes = results.findRoutes;
+                routes.length.should.be.above(1);
+                for (var i = 0; i < routes.length - 1; i++) {
+                    var first = new Date(routes[i].created),
+                        next = new Date(routes[i + 1].created);
+                    first.should.be.above(next);
+                }
+            });
+        });
+
+
+        it('should be able to sort routes by creation date ascending', function (done) {
+            async.series({
+                createRoutes: function (done) {
+                    async.parallel([
+                        function createRouteA(done) {
+                            service.route.create(userAId, done);
+                        },
+                        function createRouteB(done) {
+                            setTimeout(function () {
+                                service.route.create(userAId, done);
+                            }, 1000);
+                        }
+                    ], done);
+                },
+                findRoutes: function (done) {
+                    server.get('/api/routes?sortDirection=asc')
+                        .expect(200)
+                        .end(function (err, res) {
+                            done(err, res.body);
+                        });
+                }
+            }, function (err, results) {
+                done(err);
+                var routes = results.findRoutes;
+                routes.length.should.be.above(1);
+                for (var i = 0; i < routes.length - 1; i++) {
+                    var first = new Date(routes[i].created),
+                        next = new Date(routes[i + 1].created);
+                    first.should.be.below(next);
+                }
+            });
+        });
+    });
+
     describe('GET /routes/:routeId', function () {
         it('should retrieve a route without error', function (done) {
             async.waterfall([
