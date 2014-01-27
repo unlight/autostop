@@ -189,6 +189,53 @@ describe('Model Route:', function () {
                 done(err);
             });
         });
+
+        it('should be able to sort routes by creation date', function (done) {
+            this.timeout(3000);
+            async.series({
+                createRouteA: function (done) {
+                    route.save(done);
+                },
+                createRouteB: function (done) {
+                    setTimeout(function () {
+                        var routeB = entity.route({ creator: user });
+                        routeB.save(done);
+                    }, 1000);
+                },
+                findRoutes: function (done) {
+                    async.parallel([
+                        function sortAsc(done) {
+                            Route.search({
+                                sortBy: 'created',
+                                sortDirection: 'asc'
+                            }, done);
+                        },
+                        function sortDesc(done) {
+
+                            Route.search({
+                                sortBy: 'created',
+                                sortDirection: 'desc'
+                            }, done);
+                        }
+                    ], done);
+                }
+            }, function (err, results) {
+                done(err);
+                var routes = results.findRoutes,
+                    routesAsc = routes[0],
+                    routesDesc = routes[1];
+
+                routesAsc.length.should.be.above(1);
+                for (var i = 0; i < routesAsc.length - 1; i++) {
+                    routesAsc[i].created.should.be.below(routesAsc[i + 1].created);
+                }
+
+                routesDesc.length.should.be.above(1);
+                for (i = 0; i < routesDesc.length - 1; i++) {
+                    routesDesc[i].created.should.be.above(routesDesc[i + 1].created);
+                }
+            });
+        });
     });
 
     describe('Method deactivate', function () {

@@ -43,6 +43,10 @@ var RouteSchema = new Schema({
     active: {
         type: Boolean,
         default: true
+    },
+    created: {
+        type: Date,
+        required: true
     }
 });
 
@@ -68,25 +72,34 @@ RouteSchema.statics.load = function (id, cb) {
 RouteSchema.statics.search = function (searchData, callback) {
     searchData = searchData || {};
 
-    var criteria = {},
+    var searchCriteria = {},
         defaults = {
             active: true
         };
 
     if (!searchData.includeInactive) {
-        criteria.active = defaults.active;
+        searchCriteria.active = defaults.active;
     }
 
     if (searchData.creator) {
-        criteria.creator = {};
-        criteria.creator._id = searchData.creator instanceof ObjectId ?
+        searchCriteria.creator = {};
+        searchCriteria.creator._id = searchData.creator instanceof ObjectId ?
             searchData.creator :
             new ObjectId(searchData.creator);
     }
 
-    this.find(criteria)
+    var sortCriteria = {};
+    sortCriteria[searchData.sortBy || 'created'] = searchData.sortDirection || 'descending';
+
+    this.find(searchCriteria)
+        .sort(sortCriteria)
         .populate('creator')
         .exec(callback);
 };
+
+RouteSchema.pre('validate', function (next) {
+    this.created = this.created || new Date();
+    next();
+});
 
 mongoose.model('Route', RouteSchema);
