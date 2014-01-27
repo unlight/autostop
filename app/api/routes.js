@@ -1,8 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    Route = mongoose.model('Route'),
-    _ = require('underscore');
+    Route = mongoose.model('Route');
 
 exports.create = function (req, res) {
     var route = new Route(req.body);
@@ -26,13 +25,19 @@ exports.create = function (req, res) {
 };
 
 exports.update = function (req, res) {
-    var whitelist = _.pick(req.body, 'title', 'origin', 'destination', 'description');
-    var route = _.extend(req.routeparam, whitelist);
+    req.routeparam.update(req.body, function (err) {
+        if (err) {
+            res.jsonp(500, err);
+        }
+        else {
+            Route.load(req.routeparam._id, function (err, route) {
+                if (err) {
+                    return res.jsonp(500, err);
+                }
 
-    route = _.extend(route, req.body);
-
-    route.save(function () {
-        res.jsonp(route);
+                return res.jsonp(route);
+            });
+        }
     });
 };
 

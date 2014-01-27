@@ -13,7 +13,7 @@ var should = require('should'),
 var user;
 var route;
 
-describe.only('Model Route:', function () {
+describe('Model Route:', function () {
     before(function (done) {
         async.series({
             removeAllRoutes: function (callback) {

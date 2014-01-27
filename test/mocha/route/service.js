@@ -35,6 +35,26 @@ describe('Route service', function () {
             });
         });
 
+        it('should create a new route with optional fields', function (done) {
+            var createData = service.route.getCreateData();
+            createData.icon = 'Icon';
+            createData.seats = 5;
+            createData.start = new Date(1, 1, 1, 18, 55);
+
+            server.post('/api/routes')
+                .set('userId', userAId)
+                .send(createData)
+                .expect(200)
+                .end(function (err, res) {
+                    done(err);
+
+                    var route = res.body;
+                    route.icon.should.equal(createData.icon);
+                    route.seats.should.equal(createData.seats);
+                    new Date(route.start).should.eql(createData.start);
+                });
+        });
+
         it('should fail to create a route for not authenticated user', function (done) {
             var createData = service.route.getCreateData();
 
@@ -78,7 +98,6 @@ describe('Route service', function () {
                 }
             });
         });
-
 
         it('should be able to sort routes by creation date ascending', function (done) {
             async.series({

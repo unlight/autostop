@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    _ = require('underscore'),
     Schema = mongoose.Schema,
     ObjectId = mongoose.Types.ObjectId;
 
@@ -63,6 +64,13 @@ RouteSchema.virtual('creatorId')
     .get(function () {
         return this.creator._id || this.creator;
     });
+
+RouteSchema.methods.update = function (updateData, callback) {
+    var route = this;
+    updateData = _.pick(updateData, 'title', 'origin', 'destination', 'description', 'seats', 'icon', 'start');
+    _.extend(route, updateData);
+    route.save(callback);
+};
 
 RouteSchema.methods.deactivate = function (callback) {
     this.model('Route')
