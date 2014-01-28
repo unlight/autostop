@@ -94,25 +94,29 @@ TripSchema.statics.load = function (tripId, callback) {
 };
 
 TripSchema.statics.search = function (searchData, callback) {
-    var criteria = {};
+    var searchCriteria = {};
 
     if (!searchData.includeInactive) {
-        criteria.active = true;
+        searchCriteria.active = true;
     }
 
     if (searchData.startMin) {
-        criteria.start = {
+        searchCriteria.start = {
             '$gte': new Date(searchData.startMin)
         };
     }
 
     if (searchData.creator) {
-        criteria.creator = searchData.creator instanceof ObjectId ?
+        searchCriteria.creator = searchData.creator instanceof ObjectId ?
             searchData.creator :
             new ObjectId(searchData.creator);
     }
 
-    this.find(criteria)
+    var sortCriteria = {};
+    sortCriteria[searchData.sortBy || 'start'] = searchData.sortDirection || 'ascending';
+
+    this.find(searchCriteria)
+        .sort(sortCriteria)
         .populate('creator route')
         .exec(callback);
 };

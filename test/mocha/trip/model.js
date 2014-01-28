@@ -16,7 +16,7 @@ var user;
 var route;
 var trip;
 
-describe('Model Trip', function () {
+describe.only('Model Trip', function () {
 
     before(function (done) {
         user = entity.user();
@@ -368,6 +368,89 @@ describe('Model Trip', function () {
             });
         });
 
+        it('should sort trips by start date asc by default', function (done) {
+            async.series({
+                createTrips: function (done) {
+                    async.parallel([
+                        function createTripA(done) {
+                            trip.start = new Date();
+                            trip.save(done);
+                        },
+                        function createTripB(done) {
+                            var now = new Date();
+                            var tripB = entity.trip({
+                                creator: user._id,
+                                route: route._id,
+                                start: now.setFullYear(now.getFullYear() + 1)
+                            });
+                            tripB.save(done);
+                        }
+                    ], done);
+                },
+                findTrips: function (done) {
+                    Trip.search({}, done);
+                }
+            }, function (err, results) {
+                done(err);
+                var trips = results.findTrips;
+                trips.length.should.be.above(1);
+                for (var i = 0; i < trips.length - 1; i++) {
+                    (trips[i].start <= trips[i + 1].start).should.be.ok;
+                }
+            });
+        });
+
+        it('should be able to sort trips by start date', function (done) {
+            async.series({
+                createTrips: function (done) {
+                    async.parallel([
+                        function createTripA(done) {
+                            trip.start = new Date();
+                            trip.save(done);
+                        },
+                        function createTripB(done) {
+                            var now = new Date();
+                            var tripB = entity.trip({
+                                creator: user._id,
+                                route: route._id,
+                                start: now.setFullYear(now.getFullYear() + 1)
+                            });
+                            tripB.save(done);
+                        }
+                    ], done);
+                },
+                findTrips: function (done) {
+                    async.parallel([
+                        function searchAsc(done) {
+                            Trip.search({
+                                sortDirection: 'asc',
+                                sortBy: 'start'
+                            }, done);
+                        },
+                        function searchDesc(done) {
+                            Trip.search({
+                                sortDirection: 'desc',
+                                sortBy: 'start'
+                            }, done);
+                        }
+                    ], done);
+                }
+            }, function (err, results) {
+                done(err);
+
+                var tripsAsc = results.findTrips[0];
+                tripsAsc.length.should.be.above(1);
+                for (var i = 0; i < tripsAsc.length - 1; i++) {
+                    (tripsAsc[i].start <= tripsAsc[i + 1].start).should.be.ok;
+                }
+
+                var tripsDesc = results.findTrips[1];
+                tripsDesc.length.should.be.above(1);
+                for (i = 0; i < tripsDesc.length - 1; i++) {
+                    (tripsDesc[i].start >= tripsDesc[i + 1].start).should.be.ok;
+                }
+            });
+        });
     });
 
     afterEach(function (done) {
