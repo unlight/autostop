@@ -108,6 +108,59 @@ describe('Trip service', function () {
                 done(err);
             });
         });
+
+        it('should be able to sort trips by start date', function (done) {
+            async.series({
+                createTrips: function (done) {
+                    async.parallel([
+                        function createTripA(done) {
+                            service.trip.create(routeA.creator._id, { route: routeA._id}, done);
+                        },
+                        function createTripB(done) {
+                            var createData = service.trip.getCreateData({ route: routeA._id});
+                            createData.start = new Date(createData.start.setFullYear(createData.start.getFullYear() + 1));
+                            server.post('/api/trips')
+                                .set('userId', routeA.creator._id)
+                                .send(createData)
+                                .expect(200)
+                                .end(done);
+                        }
+                    ], done);
+                },
+                findTrips: function (done) {
+                    async.parallel([
+                        function asc(done) {
+                            server.get('/api/trips?sortBy=start&sortDirection=asc')
+                                .expect(200)
+                                .end(function (err, res) {
+                                    done(err, res.body);
+                                });
+                        },
+                        function desc(done) {
+                            server.get('/api/trips?sortBy=start&sortDirection=desc')
+                                .expect(200)
+                                .end(function (err, res) {
+                                    done(err, res.body);
+                                });
+                        }
+                    ], done);
+                }
+            }, function (err, results) {
+                done(err);
+
+                var tripsAsc = results.findTrips[0];
+                tripsAsc.length.should.be.above(1);
+                for (var i = 0; i < tripsAsc.length - 1; i++) {
+                    (new Date(tripsAsc[i].start) <= new Date(tripsAsc[i + 1].start)).should.be.ok;
+                }
+
+                var tripsDesc = results.findTrips[1];
+                tripsDesc.length.should.be.above(1);
+                for (i = 0; i < tripsDesc.length - 1; i++) {
+                    (new Date(tripsDesc[i].start) >= new Date(tripsDesc[i + 1].start)).should.be.ok;
+                }
+            });
+        });
     });
 
     describe('PUT /trips/:tripId', function () {
@@ -267,10 +320,10 @@ describe('Trip service', function () {
                         });
                 }
             ], function (err, trip) {
-                    done(err);
-                    trip.passengers.length.should.equal(1);
-                    trip.passengers[0].should.equal(userBId);
-                });
+                done(err);
+                trip.passengers.length.should.equal(1);
+                trip.passengers[0].should.equal(userBId);
+            });
         });
 
         it('should fail for not authenticated request', function (done) {

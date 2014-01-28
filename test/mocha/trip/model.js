@@ -16,7 +16,7 @@ var user;
 var route;
 var trip;
 
-describe.only('Model Trip', function () {
+describe('Model Trip', function () {
 
     before(function (done) {
         user = entity.user();
