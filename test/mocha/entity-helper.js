@@ -26,6 +26,15 @@ function route() {
     });
 }
 
+function location() {
+    var Location = mongoose.model('Location');
+
+    return new Location({
+        title: 'LocationA',
+        creator: user._id
+    });
+}
+
 function trip() {
     var Trip = mongoose.model('Trip'),
         creator = user();
@@ -40,6 +49,10 @@ function trip() {
 
 exports.user = function (source) {
     return _.extend(user(), source);
+};
+
+exports.location = function (source) {
+    return _.extend(location(), source);
 };
 
 exports.route = function (source) {
