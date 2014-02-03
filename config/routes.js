@@ -78,6 +78,10 @@ module.exports = function(app, passport, auth) {
     //Finish with setting up the articleId param
     app.param('articleId', articles.article);
 
+    var locationsApi = require('../app/api/locations');
+    app.post(apiUri('/locations'), auth.requiresLogin, locationsApi.create);
+    app.get(apiUri('/locations'), locationsApi.search);
+
     var routesApi = require('../app/api/routes');
     app.get(apiUri('/routes'), routesApi.search);
     app.post(apiUri('/routes'), auth.requiresLogin, routesApi.create);

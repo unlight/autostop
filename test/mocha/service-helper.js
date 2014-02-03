@@ -32,6 +32,24 @@ var ServiceHelper = function (server) {
         }
     };
 
+    this.location = {
+        getCreateData: function () {
+            return {
+                title: 'Location'
+            };
+        },
+        create: function (userId, done) {
+            var createData = this.getCreateData();
+            server.post('/api/locations')
+                .set('userId', userId)
+                .send(createData)
+                .expect(200)
+                .end(function (err, res) {
+                    done(err, res.body);
+                });
+        }
+    };
+
     this.route = {
         getCreateData: function () {
             return {
