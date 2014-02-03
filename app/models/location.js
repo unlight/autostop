@@ -1,7 +1,9 @@
 'use strict';
 
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+var _ = require('underscore'),
+    mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    ObjectId = mongoose.Types.ObjectId;
 
 var LocationSchema = new mongoose.Schema({
     title: {
@@ -31,7 +33,24 @@ LocationSchema.statics.load = function (locationId, done) {
         .exec(done);
 };
 
-//LocationSchema.statics.search = function (searchData, done) {
-//};
+LocationSchema.statics.search = function (searchData, done) {
+    var searchCriteria = _.pick(searchData, 'title', 'creator');
+    if (searchCriteria.title) {
+        searchCriteria.title = new RegExp(searchCriteria.title, 'i');
+    }
+    if (searchCriteria.creator) {
+        searchCriteria.creator = searchCriteria.creator instanceof ObjectId ?
+            searchCriteria.creator :
+            new ObjectId(searchCriteria.creator);
+    }
+
+    var sortCriteria = {};
+    sortCriteria[searchData.sortBy || 'title'] = searchData.sortDirection || 'asc';
+
+    this.find(searchCriteria)
+        .sort(sortCriteria)
+        .populate('creator')
+        .exec(done);
+};
 
 mongoose.model('Location', LocationSchema);

@@ -30,7 +30,7 @@ function location() {
     var Location = mongoose.model('Location');
 
     return new Location({
-        title: 'LocationA',
+        title: 'Location',
         creator: user._id
     });
 }
