@@ -26,8 +26,8 @@ var ServiceHelper = function (server) {
                 .send(createData)
                 .expect(200)
                 .end(function (err, res) {
-                    var userId = res.body;
-                    done(err, userId);
+                    var user = res.body;
+                    done(err, user);
                 });
         }
     };
