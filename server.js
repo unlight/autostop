@@ -19,7 +19,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 //Initializing system variables 
 var config = require('./config/config'),
-    auth = require('./config/middlewares/authorization'),
+    authApi = require('./config/middlewares/authorization-api'),
     mongoose = require('mongoose');
 
 //Bootstrap db connection
@@ -51,7 +51,7 @@ var app = express();
 require('./config/express')(app, passport, db);
 
 //Bootstrap routes
-require('./config/routes')(app, passport, auth);
+require('./config/routes')(app, passport, authApi);
 
 //Start the app by listening on <port>
 var port = process.env.PORT || config.port;

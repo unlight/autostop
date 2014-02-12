@@ -1,5 +1,7 @@
 'use strict';
 
+var authWeb = require('./middlewares/authorization-web');
+
 module.exports = function(app, passport, auth) {
     //User Routes
     var users = require('../app/controllers/users');
@@ -103,7 +105,7 @@ module.exports = function(app, passport, auth) {
     //Home routes
     var index = require('../app/controllers/index');
     app.get(apiUri(), index.api);
-    app.get('/', index.render);
+    app.get('/', authWeb.requiresLogin, index.render);
 };
 
 function apiUri(uri) {
