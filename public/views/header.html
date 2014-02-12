@@ -16,14 +16,14 @@
     </ul>
     <ul ng-show="global.authenticated" class="nav navbar-nav navbar-right">
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{global.user.name}}&nbsp;<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{global.user.name}}&nbsp;<b
+                    class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="/signout">Sign-out</a></li>
             </ul>
         </li>
     </ul>
-    <div ng-hide="global.authenticated" class="nav navbar-nav navbar-right">
-        <a href="/signin" class="btn btn-primary navbar-btn">Sign-in</a>
-        <a href="/signup">|&nbsp;Sign-up</a>
+    <div ng-hide="global.authenticated" class="navbar-form navbar-right" ng-controller="SigninController">
+        <button class="btn btn-primary" ng-click="open()">Войти</button>
     </div>
 </div>
