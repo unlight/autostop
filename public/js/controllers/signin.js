@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('autostop.users').controller('SigninController', ['$scope', '$modal', 'Global', function ($scope, $modal, Global) {
+angular.module('autostop.users').controller('SigninController', ['$scope', '$modal', function ($scope, $modal) {
     $scope.open = function () {
 
-        var modalInstance = $modal.open({
+        $modal.open({
             templateUrl: 'views/users/signin.html',
             controller: function ($scope, $modalInstance) {
                 $scope.ok = function () {
