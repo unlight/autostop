@@ -36,6 +36,7 @@ angular.module('autostop.users').controller('SignupController', [ '$scope', '$lo
 
         $scope.signup = function () {
             var user = new Users($scope.user);
+            user.username = user.email;
 
             $log.info('Save user');
             $log.info(user);
