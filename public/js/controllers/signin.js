@@ -1,19 +1,30 @@
 'use strict';
 
-angular.module('autostop.users').controller('SigninController', ['$scope', '$modal', function ($scope, $modal) {
+angular.module('autostop.users').controller('SigninController', ['$scope', '$modal', '$log', 'Users', function ($scope, $modal, $log, Users) {
     $scope.open = function () {
 
         $modal.open({
             templateUrl: 'views/users/signin.html',
-            controller: function ($scope, $modalInstance) {
-                $scope.ok = function () {
-                    $modalInstance.close();
-                };
-
-                $scope.cancel = function () {
-                    $modalInstance.dismiss('cancel');
-                };
-            }
+            controller: ModalController
         });
     };
+
+    function ModalController($scope, $modalInstance) {
+        $scope.user = {};
+
+        $scope.ok = function () {
+            $modalInstance.close();
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        $scope.signin = function () {
+            Users.login($scope.user.email, $scope.user.password)
+                .success(function () {
+                    window.location.href = '/';
+                });
+        };
+    }
 }]);

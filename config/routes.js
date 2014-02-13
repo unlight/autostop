@@ -2,7 +2,7 @@
 
 var authWeb = require('./middlewares/authorization-web');
 
-module.exports = function(app, passport, auth) {
+module.exports = function (app, passport, auth) {
     //User Routes
     var users = require('../app/controllers/users');
     app.get('/signin', users.signin);
@@ -18,6 +18,26 @@ module.exports = function(app, passport, auth) {
         failureRedirect: '/signin',
         failureFlash: true
     }), users.session);
+
+
+    app.post('/login', function (req, res, next) {
+        console.log('AUTH: login');
+        passport.authenticate('local', function (err, user) {
+            if (err) {
+                return next(err);
+            }
+            if (!user) {
+                return res.jsonp(401, 'Login and password do not match.');
+            }
+            req.logIn(user, function (err) {
+                if (err) {
+                    return next(err);
+                }
+                return res.jsonp(user);
+            });
+        })(req, res, next);
+    });
+
 
     //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
