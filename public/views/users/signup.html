@@ -3,38 +3,38 @@
     <h3>Регистрация</h3>
 </div>
 <div class="modal-body">
-    <form class="form-horizontal" role="form">
+    <form class="form-horizontal" role="form" ng-submit="signup()">
         <div class="form-group">
             <label class="control-label col-sm-4" for="name">Имя и фамилия:</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="name" placeholder="Иван Иванов"/>
+                <input class="form-control" type="text" id="name" placeholder="Иван Иванов" ng-model="user.name"/>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-4" for="email">E-mail:</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="email" placeholder="name@company.com"/>
+                <input class="form-control" type="text" id="email" placeholder="name@company.com" ng-model="user.email"/>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-4" for="phone">Телефон:</label>
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="phone" placeholder="+7 123 456 7890"/>
+                <input class="form-control" type="text" id="phone" placeholder="+7 123 456 7890" ng-model="user.phone"/>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-4" for="password">Пароль:</label>
             <div class="col-sm-8">
-                <input class="form-control" type="password" id="password" placeholder="Пароль"/>
+                <input class="form-control" type="password" id="password" placeholder="Пароль" ng-model="user.password"/>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-4 col-sm-8">
-                <button class="btn btn-lg btn-primary btn-block" ng-click="ok()">Зарегистрироваться</button>
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Зарегистрироваться"/>
             </div>
         </div>
     </form>
