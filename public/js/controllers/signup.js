@@ -1,18 +1,15 @@
 'use strict';
 
 angular.module('autostop.users').controller('SignupController', [ '$scope', '$log', '$modal', 'Users', function ($scope, $log, $modal, Users) {
+    $scope.user ={};
+
     $scope.open = function () {
         $modal.open({
             templateUrl: 'views/users/signup.html',
             controller: ModalController,
             resolve: {
                 defaults: function () {
-                    return {
-                        name: 'Ivan Ivanov',
-                        email: 'ivan.ivanov@mail.com',
-                        phone: '+7 123 456 7890',
-                        password: '1234'
-                    };
+                    return $scope.user;
                 }
             }
         });
