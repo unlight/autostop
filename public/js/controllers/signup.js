@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('autostop.users').controller('SignupController', [ '$scope', '$log', '$modal', 'Users', function ($scope, $log, $modal, Users) {
-    $scope.user ={};
+    $scope.user = {};
 
     $scope.open = function () {
         $modal.open({
@@ -31,7 +31,8 @@ angular.module('autostop.users').controller('SignupController', [ '$scope', '$lo
                 credentials = {
                     email: user.email,
                     password: user.password
-            };
+                };
+
             user.username = user.email;
 
             user.$save(function () {
@@ -40,7 +41,7 @@ angular.module('autostop.users').controller('SignupController', [ '$scope', '$lo
                             window.location.href = '/';
                         });
                 },
-                function (err) {
+                function () {
                     form.email.$setViewValue(form.name.$viewValue);
                     form.email.$setValidity('unique', false);
                 });
