@@ -9,8 +9,8 @@ angular.module('autostop.users').factory('Users', ['$resource', '$http', functio
         }
     });
 
-    Users.login = function (email, password) {
-        return $http.post('/api/users/signin', { email: email, password: password});
+    Users.signin = function (credentials) {
+        return $http.post('/api/users/signin', { email: credentials.email, password: credentials.password });
     };
 
     return Users;

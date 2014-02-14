@@ -27,11 +27,18 @@ angular.module('autostop.users').controller('SignupController', [ '$scope', '$lo
         };
 
         $scope.signup = function (form) {
-            var user = new Users($scope.user);
+            var user = new Users($scope.user),
+                credentials = {
+                    email: user.email,
+                    password: user.password
+            };
             user.username = user.email;
 
             user.$save(function () {
-                    window.location.href = '/';
+                    Users.signin(credentials)
+                        .success(function () {
+                            window.location.href = '/';
+                        });
                 },
                 function (err) {
                     form.email.$setViewValue(form.name.$viewValue);

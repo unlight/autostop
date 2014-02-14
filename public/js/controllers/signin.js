@@ -21,7 +21,7 @@ angular.module('autostop.users').controller('SigninController', ['$scope', '$mod
         };
 
         $scope.signin = function () {
-            Users.login($scope.user.email, $scope.user.password)
+            Users.signin($scope.user)
                 .success(function () {
                     window.location.href = '/';
                 });
