@@ -30,14 +30,10 @@ angular.module('autostop.users').controller('SignupController', [ '$scope', '$lo
             var user = new Users($scope.user);
             user.username = user.email;
 
-            $log.info('Save user');
-            $log.info(user);
-
             user.$save(function () {
-                    $log.info(' User created');
+                    window.location.href = '/';
                 },
                 function (err) {
-                    $log.warn(err.data);
                     form.email.$setViewValue(form.name.$viewValue);
                     form.email.$setValidity('unique', false);
                 });
