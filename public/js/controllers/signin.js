@@ -24,6 +24,10 @@ angular.module('autostop.users').controller('SigninController', ['$scope', '$mod
             Users.signin($scope.user)
                 .success(function () {
                     window.location.href = '/';
+                })
+                .error(function (err) {
+                    $log.warn(err);
+                    $scope.hasServerError = true;
                 });
         };
     }

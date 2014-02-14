@@ -6,21 +6,34 @@
     <form class="form-horizontal" role="form" name="signinForm" ng-submit="signin()">
         <div class="form-group">
             <label class="control-label col-sm-4" for="email">E-mail:</label>
+
             <div class="col-sm-8">
-                <input class="form-control" type="text" id="email" placeholder="E-mail" required ng-model="user.email"/>
+                <input class="form-control" type="email" id="email" placeholder="E-mail" required
+                       ng-model="user.email"/>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-4" for="password">Пароль:</label>
+
             <div class="col-sm-8">
-                <input class="form-control" type="password" id="password" placeholder="Password" required ng-model="user.password"/>
+                <input class="form-control" type="password" id="password" placeholder="Пароль" required
+                       ng-model="user.password"/>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="hasServerError">
+            <div class="col-sm-offset-4 col-sm-8">
+                <div class="alert alert-warning">
+                    E-mail или пароль не подходят.
+                </div>
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-sm-offset-4 col-sm-8">
-                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signinForm.$invalid">Войти</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" ng-disabled="signinForm.$invalid">Войти
+                </button>
             </div>
         </div>
 
@@ -30,7 +43,8 @@
                 <img src="https://cdn3.iconfinder.com/data/icons/free-social-icons/67/facebook_circle_color-48.png"/>
                 <img src="https://cdn3.iconfinder.com/data/icons/free-social-icons/67/google_circle_color-48.png"/>
                 <img src="https://cdn3.iconfinder.com/data/icons/free-social-icons/67/github_circle_color-48.png"/>
-                <img src="https://cdn1.iconfinder.com/data/icons/round-simple-social-icons/58/vkontakte.png" width="44" height="44"/>
+                <img src="https://cdn1.iconfinder.com/data/icons/round-simple-social-icons/58/vkontakte.png" width="44"
+                     height="44"/>
             </div>
         </div>
     </form>
