@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('autostop.users').factory('Users', ['$resource', '$http', '$log', function ($resource, $http, $log) {
+angular.module('autostop.users').factory('Users', ['$resource', '$http', function ($resource, $http) {
     var Users = $resource('/api/users/:userId', {
         userId: '@_id'
     }, {
@@ -10,14 +10,7 @@ angular.module('autostop.users').factory('Users', ['$resource', '$http', '$log',
     });
 
     Users.login = function (email, password) {
-        return $http.post('/login', { email: email, password: password}, function (user) {
-            $log.info('Success!');
-            $log.info(user);
-        })
-        .error(function (err) {
-            $log.warn('Error!');
-            $log.warn(err);
-        });
+        return $http.post('/api/users/signin', { email: email, password: password});
     };
 
     return Users;

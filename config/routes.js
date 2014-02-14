@@ -20,8 +20,7 @@ module.exports = function (app, passport, auth) {
     }), users.session);
 
 
-    app.post('/login', function (req, res, next) {
-        console.log('AUTH: login');
+    app.post(apiUri('/users/signin'), function (req, res, next) {
         passport.authenticate('local', function (err, user) {
             if (err) {
                 return next(err);
