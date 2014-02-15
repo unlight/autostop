@@ -1,7 +1,8 @@
-<form class="form-horizontal" ng-submit="create()">
+<form class="form-horizontal" ng-submit="create(route, title(route.origin.title, route.destination.title))">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
         <h3>Создание/редактирование маршрута</h3>
+        <h4 ng-show="route.origin && route.destination">{{title(route.origin.title, route.destination.title)}}</h4>
     </div>
 
     <div class="modal-body">
@@ -12,14 +13,15 @@
         <div class="form-group">
             <label class="control-label col-sm-4" for="origin">Откуда:</label>
             <div class="col-sm-8">
-                <select id="origin" class="form-control"></select>
+                <select id="origin" class="form-control" ng-options="l.title for l in locations" ng-model="route.origin"></select>
             </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-4" for="destination">Куда:</label>
             <div class="col-sm-8">
-                <select id="destination" class="form-control"></select>
+                <select id="destination" class="form-control" ng-options="l.title for l in locations" ng-model="route.destination"></select>
+
             </div>
         </div>
     </div>
