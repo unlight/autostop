@@ -1,7 +1,14 @@
 <section data-ng-controller="IndexController">
-    <h1>Маршруты</h1>
 
     <div ng-controller="RoutesController">
+        <h1>Маршруты</h1>
+
+        <ul>
+            <li ng-repeat="route in routes">
+                {{route.title}} ({{route.created | date:'medium'}})
+            </li>
+        </ul>
+
         <button class="btn btn-primary" ng-click="add()">Добавить маршрут</button>
     </div>
 

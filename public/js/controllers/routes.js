@@ -1,10 +1,17 @@
 'use strict';
 
 angular.module('autostop.routes').controller('RoutesController', ['$scope', '$log', '$modal', 'Locations', 'Routes', function ($scope, $log, $modal, Locations, Routes) {
+    $scope.routes = Routes.query();
+
     $scope.add = function () {
-        $modal.open({
+        var modal = $modal.open({
             templateUrl: 'views/routes/item.html',
             controller: ModalController
+        });
+
+        modal.result.then(function (route) {
+            console.log(route);
+            $scope.routes.push(route);
         });
     };
 
@@ -33,7 +40,7 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
             });
 
             route.$save(function (route) {
-                $log.info(route);
+                $modalInstance.close(route);
             });
         };
     }
