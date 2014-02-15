@@ -1,11 +1,29 @@
-<form ng-submit="create()">
+<form class="form-horizontal" ng-submit="create()">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">&times;</button>
         <h3>Создание/редактирование маршрута</h3>
     </div>
+
     <div class="modal-body">
-        <p>Элементы управления</p>
+        <div class="form-group">
+            <label for="icon" class="control-label col-sm-4">Значок:</label>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="origin">Откуда:</label>
+            <div class="col-sm-8">
+                <select id="origin" class="form-control"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="destination">Куда:</label>
+            <div class="col-sm-8">
+                <select id="destination" class="form-control"></select>
+            </div>
+        </div>
     </div>
+
     <div class="modal-footer">
         <input class="btn btn-primary" type="submit" value="Сохранить изменения"/>
         <input class="btn btn-default" value="Не сохранять изменения и закрыть" type="button" ng-click="cancel"/>
