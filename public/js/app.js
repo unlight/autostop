@@ -10,7 +10,8 @@ angular.module('autostop', [
     'autostop.articles',
     'autostop.users',
     'autostop.routes',
-    'autostop.locations']);
+    'autostop.locations'
+]);
 
 angular.module('autostop.system', []);
 angular.module('autostop.articles', []);
