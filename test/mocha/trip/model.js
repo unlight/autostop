@@ -12,19 +12,24 @@ var should = require('should'),
     Trip = mongoose.model('Trip'),
     User = mongoose.model('User');
 
-var user;
-var route;
-var trip;
-
 describe('Model Trip', function () {
+
+    var user;
+    var location;
+    var route;
+    var trip;
 
     before(function (done) {
         user = entity.user();
-        route = entity.route({ creator: user });
+        location = entity.location({creator: user});
+        route = entity.route({ creator: user, origin: location._id, destination: location._id });
 
         async.series({
             saveUser: function (callback) {
                 user.save(callback);
+            },
+            saveLocation: function (callback) {
+                location.save(callback);
             },
             saveRoute: function (callback) {
                 route.save(callback);

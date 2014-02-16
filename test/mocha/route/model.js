@@ -12,6 +12,8 @@ var should = require('should'),
 
 var user;
 var route;
+var locationA;
+var locationB;
 
 describe('Model Route:', function () {
     before(function (done) {
@@ -22,12 +24,24 @@ describe('Model Route:', function () {
             createUser: function (callback) {
                 user = entity.user();
                 user.save(callback);
+            },
+            createLocations: function (callback) {
+                async.parallel([
+                    function createLocationA(done) {
+                        locationA = entity.location({creator: user._id});
+                        locationA.save(done);
+                    },
+                    function createLocationB(done) {
+                        locationB = entity.location({creator: user._id});
+                        locationB.save(done);
+                    }
+                ], callback);
             }
         }, done);
     });
 
     beforeEach(function (done) {
-        route = entity.route({ creator: user });
+        route = entity.route({ creator: user, origin: locationA, destination: locationB });
         done();
     });
 
@@ -94,7 +108,10 @@ describe('Model Route:', function () {
                     Route.load(route._id, callback);
                 }
             }, function (err, results) {
-                results.loadRoute.creator.should.be.an.instanceof(mongoose.model('User'));
+                var route = results.loadRoute;
+                route.creator.should.be.an.instanceof(mongoose.model('User'));
+                route.origin.should.be.an.instanceof(mongoose.model('Location'));
+                route.destination.should.be.an.instanceof(mongoose.model('Location'));
                 done(err);
             });
         });
@@ -135,6 +152,8 @@ describe('Model Route:', function () {
                 routes.length.should.be.above(0);
                 _.each(routes, function (route) {
                     route.creator.should.be.an.instanceof(mongoose.model('User'));
+                    route.origin.should.be.an.instanceof(mongoose.model('Location'));
+                    route.destination.should.be.an.instanceof(mongoose.model('Location'));
                 });
                 done(err);
             });

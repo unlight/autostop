@@ -16,12 +16,18 @@ describe('Trip service', function () {
     before(function (done) {
         async.parallel([
             function createRouteA(done) {
+                var userId;
+
                 async.waterfall([
                     function createUser(done) {
                         service.user.create(done);
                     },
-                    function createRoute(user, done) {
-                        service.route.create(user._id, done);
+                    function createLocation(user, done) {
+                        userId = user._id;
+                        service.location.create(userId, done);
+                    },
+                    function createRoute(location, done) {
+                        service.route.create(userId, location._id, done);
                     }
                 ], done);
             },

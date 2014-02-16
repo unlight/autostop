@@ -11,32 +11,48 @@ var supertest = require('supertest'),
 describe('Route service', function () {
     var userAId;
     var userBId;
+    var locationId;
 
     before(function (done) {
-        async.parallel([
-            function createUserA(done) {
-                service.user.create(done);
+        async.series({
+            createUsers: function (done) {
+                async.parallel([
+                    function createUserA(done) {
+                        service.user.create(done);
+                    },
+                    function createUserB(done) {
+                        service.user.create(done);
+                    }
+                ], function (err, results) {
+                    userAId = results[0]._id;
+                    userBId = results[1]._id;
+                    done(err);
+                });
             },
-            function createUserB(done) {
-                service.user.create(done);
+            createLocation: function (done) {
+                service.location.create(userAId, done);
             }
-        ], function (err, results) {
-            userAId = results[0]._id;
-            userBId = results[1]._id;
+        }, function (err, results) {
+            locationId = results.createLocation._id;
             done(err);
         });
     });
 
     describe('POST /routes', function () {
         it('should create a new route without error', function (done) {
-            service.route.create(userAId, function (err, route) {
+            service.route.create(userAId, locationId, function (err, route) {
                 route.creator._id.should.equal(userAId);
+                route.origin._id.should.equal(locationId);
+                route.destination._id.should.equal(locationId);
                 done(err);
             });
         });
 
         it('should create a new route with optional fields', function (done) {
-            var createData = service.route.getCreateData();
+            var createData = service.route.getCreateData({
+                origin: locationId,
+                destination: locationId
+            });
             createData.icon = 'Icon';
             createData.seats = 5;
             createData.start = new Date(1, 1, 1, 18, 55);
@@ -56,7 +72,10 @@ describe('Route service', function () {
         });
 
         it('should fail to create a route for not authenticated user', function (done) {
-            var createData = service.route.getCreateData();
+            var createData = service.route.getCreateData({
+                origin: locationId,
+                destination: locationId
+            });
 
             server.post('/api/routes')
                 .send(createData)
@@ -71,11 +90,11 @@ describe('Route service', function () {
                 createRoutes: function (done) {
                     async.parallel([
                         function createRouteA(done) {
-                            service.route.create(userAId, done);
+                            service.route.create(userAId, locationId, done);
                         },
                         function createRouteB(done) {
                             setTimeout(function () {
-                                service.route.create(userAId, done);
+                                service.route.create(userAId, locationId, done);
                             }, 1000);
                         }
                     ], done);
@@ -104,11 +123,11 @@ describe('Route service', function () {
                 createRoutes: function (done) {
                     async.parallel([
                         function createRouteA(done) {
-                            service.route.create(userAId, done);
+                            service.route.create(userAId, locationId, done);
                         },
                         function createRouteB(done) {
                             setTimeout(function () {
-                                service.route.create(userAId, done);
+                                service.route.create(userAId, locationId, done);
                             }, 1000);
                         }
                     ], done);
@@ -137,7 +156,7 @@ describe('Route service', function () {
         it('should retrieve a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    service.route.create(userAId, function (err, route) {
+                    service.route.create(userAId, locationId, function (err, route) {
                         done(err, route._id);
                     });
                 },
@@ -160,7 +179,7 @@ describe('Route service', function () {
         it('should update a route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    service.route.create(userAId, function (err, route) {
+                    service.route.create(userAId, locationId, function (err, route) {
                         done(err, route._id);
                     });
                 },
@@ -184,7 +203,7 @@ describe('Route service', function () {
         it('should fail to update a route of another user', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    service.route.create(userAId, function (err, route) {
+                    service.route.create(userAId, locationId, function (err, route) {
                         done(err, route._id);
                     });
                 },
@@ -208,7 +227,7 @@ describe('Route service', function () {
         it('should deactivate route without error', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    service.route.create(userAId, function (err, route) {
+                    service.route.create(userAId, locationId, function (err, route) {
                         done(err, route._id);
                     });
                 },
@@ -237,7 +256,7 @@ describe('Route service', function () {
         it('should fail to deactivate route of another user', function (done) {
             async.waterfall([
                 function createRoute(done) {
-                    service.route.create(userAId, function (err, route) {
+                    service.route.create(userAId, locationId, function (err, route) {
                         done(err, route._id);
                     });
                 },
