@@ -6,6 +6,7 @@ require('should');
 var supertest = require('supertest'),
     server = supertest(require('../../../server')),
     async = require('async'),
+    uuid = require('node-uuid'),
     service = require('../service-helper')(server);
 
 describe('Route service', function () {
@@ -46,6 +47,23 @@ describe('Route service', function () {
                 route.destination._id.should.equal(locationId);
                 done(err);
             });
+        });
+
+        it('should create route with new locations', function (done) {
+            var createData = service.route.getCreateData();
+            createData.origin = service.location.getCreateData();
+            createData.destination = service.location.getCreateData();
+
+            server.post('/api/routes')
+                .set('userId', userAId)
+                .send(createData)
+                .expect(200)
+                .end(function (err, res) {
+                    done(err);
+                    var route = res.body;
+                    route.origin.title.should.equal(createData.origin.title);
+                    route.destination.title.should.equal(createData.destination.title);
+                });
         });
 
         it('should create a new route with optional fields', function (done) {
@@ -200,74 +218,105 @@ describe('Route service', function () {
             });
         });
 
-        it('should fail to update a route of another user', function (done) {
-            async.waterfall([
-                function createRoute(done) {
-                    service.route.create(userAId, locationId, function (err, route) {
-                        done(err, route._id);
-                    });
-                },
-                function updateRoute(routeId, done) {
-                    var updateData = service.route.getUpdateData();
+        describe('PUT /routes/:routeId', function () {
+            it('should update a route and create locations for origin and destination', function (done) {
+                var updateData = service.route.getUpdateData({
+                    origin: service.location.getCreateData({ title: uuid.v1()}),
+                    destination: service.location.getCreateData({ title: uuid.v1()})
+                });
 
-                    server.put('/api/routes/' + routeId)
-                        .set('userId', userBId)
-                        .send(updateData)
-                        .expect(401)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route);
+                async.waterfall([
+                    function createRoute(done) {
+                        service.route.create(userAId, locationId, function (err, route) {
+                            done(err, route._id);
                         });
-                }
-            ], done);
-        });
-    });
+                    },
+                    function updateRoute(routeId, done) {
+                        server.put('/api/routes/' + routeId)
+                            .set('userId', userAId)
+                            .send(updateData)
+                            .expect(200)
+                            .end(function (err, res) {
+                                done(err, res.body);
+                            });
+                    }
+                ], function (err, route) {
+                    done(err);
+                    route.creator._id.should.equal(userAId);
+                    route.origin.title.should.equal(updateData.origin.title);
+                    route.destination.title.should.equal(updateData.destination.title);
+                });
+            });
 
-    describe('DELETE /routes/:routeId', function () {
-        it('should deactivate route without error', function (done) {
-            async.waterfall([
-                function createRoute(done) {
-                    service.route.create(userAId, locationId, function (err, route) {
-                        done(err, route._id);
-                    });
-                },
-                function deleteRoute(routeId, done) {
-                    server.del('/api/routes/' + routeId)
-                        .set('userId', userAId)
-                        .expect(200)
-                        .end(function (err) {
-                            done(err, routeId);
+            it('should fail to update a route of another user', function (done) {
+                async.waterfall([
+                    function createRoute(done) {
+                        service.route.create(userAId, locationId, function (err, route) {
+                            done(err, route._id);
                         });
-                },
-                function loadRoute(routeId, done) {
-                    server.get('/api/routes/' + routeId)
-                        .expect(200)
-                        .end(function (err, res) {
-                            var route = res.body;
-                            done(err, route);
-                        });
-                }
-            ], function (err, route) {
-                route.active.should.be.false;
-                done(err);
+                    },
+                    function updateRoute(routeId, done) {
+                        var updateData = service.route.getUpdateData();
+
+                        server.put('/api/routes/' + routeId)
+                            .set('userId', userBId)
+                            .send(updateData)
+                            .expect(401)
+                            .end(function (err, res) {
+                                var route = res.body;
+                                done(err, route);
+                            });
+                    }
+                ], done);
             });
         });
 
-        it('should fail to deactivate route of another user', function (done) {
-            async.waterfall([
-                function createRoute(done) {
-                    service.route.create(userAId, locationId, function (err, route) {
-                        done(err, route._id);
-                    });
-                },
-                function deleteRoute(routeId, done) {
-                    server.del('/api/routes/' + routeId)
-                        .set('userId', userBId)
-                        .expect(401)
-                        .end(done);
-                },
-            ], done);
-        });
+        describe('DELETE /routes/:routeId', function () {
+            it('should deactivate route without error', function (done) {
+                async.waterfall([
+                    function createRoute(done) {
+                        service.route.create(userAId, locationId, function (err, route) {
+                            done(err, route._id);
+                        });
+                    },
+                    function deleteRoute(routeId, done) {
+                        server.del('/api/routes/' + routeId)
+                            .set('userId', userAId)
+                            .expect(200)
+                            .end(function (err) {
+                                done(err, routeId);
+                            });
+                    },
+                    function loadRoute(routeId, done) {
+                        server.get('/api/routes/' + routeId)
+                            .expect(200)
+                            .end(function (err, res) {
+                                var route = res.body;
+                                done(err, route);
+                            });
+                    }
+                ], function (err, route) {
+                    route.active.should.be.false;
+                    done(err);
+                });
+            });
 
+            it('should fail to deactivate route of another user', function (done) {
+                async.waterfall([
+                    function createRoute(done) {
+                        service.route.create(userAId, locationId, function (err, route) {
+                            done(err, route._id);
+                        });
+                    },
+                    function deleteRoute(routeId, done) {
+                        server.del('/api/routes/' + routeId)
+                            .set('userId', userBId)
+                            .expect(401)
+                            .end(done);
+                    }
+                ], done);
+            });
+
+        });
     });
 });

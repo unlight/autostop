@@ -33,10 +33,10 @@ var ServiceHelper = function (server) {
     };
 
     this.location = {
-        getCreateData: function () {
-            return {
+        getCreateData: function (source) {
+            return _.extend({
                 title: 'Location'
-            };
+            }, source);
         },
         create: function (userId, done) {
             var createData = this.getCreateData();
