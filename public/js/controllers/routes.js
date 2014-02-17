@@ -26,6 +26,21 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
             return locations;
         });
 
+        $scope.select2Options = {
+            createSearchChoice: function (term) {
+                return { id: term, text: term }
+            },
+            initSelection: function (element, callback) {
+                var data = { id: element.val(), text: element.val() };
+                callback(data);
+            },
+            query: function (query) {
+                query.callback({
+                    results: []
+                });
+            }
+        };
+
         $scope.title = function (origin, destination) {
             if (origin && destination) {
                 return origin + ' - ' + destination;
@@ -34,8 +49,8 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
 
         $scope.create = function (route, title) {
             route = new Routes({
-                origin: route.origin._id,
-                destination: route.destination._id,
+                origin: { title: route.origin.text },
+                destination: { title: route.destination.text },
                 title: title
             });
 
