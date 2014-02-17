@@ -6,6 +6,7 @@ angular.module('autostop', [
     'ngRoute',
     'ui.bootstrap',
     'ui.route',
+    'ui.select2',
     'autostop.system',
     'autostop.articles',
     'autostop.users',
