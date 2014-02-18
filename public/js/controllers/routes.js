@@ -49,7 +49,7 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
     };
 
     function CreateRouteModalController($scope, $modalInstance) {
-        $scope.mode = 'create'
+        $scope.mode = 'create';
         $scope.route = {};
 
         $scope.title = function () {
