@@ -28,16 +28,30 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
 
         $scope.select2Options = {
             createSearchChoice: function (term) {
-                return { id: term, text: term }
+                return { id: 0, text: term }
             },
             initSelection: function (element, callback) {
-                var data = { id: element.val(), text: element.val() };
+                console.log('initSelection');
+                var data = { id: element.select2('data').id, text: element.select2('data').text };
                 callback(data);
             },
             query: function (query) {
-                query.callback({
-                    results: []
+                var searchCriteria = {};
+                if (query.term) {
+                    searchCriteria.title = query.term;
+                }
+
+                Locations.query(searchCriteria, function (locations) {
+                    var results = $.map(locations, function (location) {
+                        return { id: location._id, text: location.title }
+                    });
+
+                    query.callback({
+                        results: results
+                    });
                 });
+
+
             }
         };
 
@@ -48,9 +62,15 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
         };
 
         $scope.create = function (route, title) {
+            var origin = route.origin.id ?
+                route.origin.id : { title: route.origin.text };
+
+            var destination = route.destination.id ?
+                route.destination.id : { title: route.destination.text };
+
             route = new Routes({
-                origin: { title: route.origin.text },
-                destination: { title: route.destination.text },
+                origin: origin,
+                destination: destination,
                 title: title
             });
 
