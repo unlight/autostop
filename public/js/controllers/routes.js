@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('autostop.routes').controller('RoutesController', ['$scope', '$log', '$modal', 'Locations', 'Routes', function ($scope, $log, $modal, Locations, Routes) {
+angular.module('autostop.routes').controller('RoutesController', ['$scope', '$rootScope', '$log', '$modal', 'Locations', 'Routes', function ($scope, $rootScope, $log, $modal, Locations, Routes) {
     $scope.routes = Routes.query();
 
     $scope.add = function () {
@@ -46,6 +46,10 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
             var index = $scope.routes.indexOf(route);
             $scope.routes.splice(index, 1);
         });
+    };
+
+    $scope.createTrip = function(route) {
+        $rootScope.$broadcast('trip-create-request', { route: route});
     };
 
     function CreateRouteModalController($scope, $modalInstance) {

@@ -1,7 +1,7 @@
 <section data-ng-controller="IndexController">
 
     <div ng-controller="RoutesController">
-        <h1>Маршруты</h1>
+        <h2>Маршруты</h2>
 
         <div class="row" ng-repeat="route in routes">
             <div class="col-sm-6">
@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default">Запланировать поездку</button>
+                    <button type="button" class="btn btn-default" ng-click="createTrip(route)">Запланировать поездку</button>
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                         <span class="sr-only">Выпадающее меню</span>
@@ -24,6 +24,10 @@
         </div>
 
         <button class="btn btn-primary" ng-click="add()">Добавить маршрут</button>
+    </div>
+
+    <div ng-controller="TripsController">
+        <h2>Запланированные поездки</h2>
     </div>
 
 </section>
