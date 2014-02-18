@@ -31,7 +31,6 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
                 return { id: 0, text: term }
             },
             initSelection: function (element, callback) {
-                console.log('initSelection');
                 var data = { id: element.select2('data').id, text: element.select2('data').text };
                 callback(data);
             },
@@ -50,8 +49,6 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
                         results: results
                     });
                 });
-
-
             }
         };
 
