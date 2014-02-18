@@ -6,16 +6,32 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
     $scope.add = function () {
         var modal = $modal.open({
             templateUrl: 'views/routes/item.html',
-            controller: ModalController
+            controller: CreateRouteModalController
         });
 
         modal.result.then(function (route) {
-            console.log(route);
             $scope.routes.push(route);
         });
     };
 
-    function ModalController($scope, $modalInstance) {
+    $scope.remove = function (route) {
+        var modal = $modal.open({
+            templateUrl: 'views/routes/remove.html',
+            controller: RemoveRouteModalController,
+            resolve: {
+                route: function () {
+                    return route;
+                }
+            }
+        });
+
+        modal.result.then(function (route) {
+            var index = $scope.routes.indexOf(route);
+            $scope.routes.splice(index, 1);
+        });
+    };
+
+    function CreateRouteModalController($scope, $modalInstance) {
         $scope.route = {};
 
         $scope.cancel = function () {
@@ -44,6 +60,20 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
             route.$save(function (route) {
                 $modalInstance.close(route);
             });
+        };
+    }
+
+    function RemoveRouteModalController($scope, $modalInstance, route) {
+        $scope.route = route;
+
+        $scope.ok = function () {
+            route.$delete(function () {
+                $modalInstance.close(route);
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
         };
     }
 }]);
