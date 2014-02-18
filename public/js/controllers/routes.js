@@ -22,36 +22,6 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.locations = Locations.query(function (locations) {
-            return locations;
-        });
-
-        $scope.select2Options = {
-            createSearchChoice: function (term) {
-                return { id: 0, text: term }
-            },
-            initSelection: function (element, callback) {
-                var data = { id: element.select2('data').id, text: element.select2('data').text };
-                callback(data);
-            },
-            query: function (query) {
-                var searchCriteria = {};
-                if (query.term) {
-                    searchCriteria.title = query.term;
-                }
-
-                Locations.query(searchCriteria, function (locations) {
-                    var results = $.map(locations, function (location) {
-                        return { id: location._id, text: location.title }
-                    });
-
-                    query.callback({
-                        results: results
-                    });
-                });
-            }
-        };
-
         $scope.title = function (origin, destination) {
             if (origin && destination) {
                 return origin + ' - ' + destination;
