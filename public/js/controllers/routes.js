@@ -10,7 +10,24 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
         });
 
         modal.result.then(function (route) {
-            $scope.routes.push(route);
+            $scope.routes.splice(0, 0, route);
+        });
+    };
+
+    $scope.edit = function (route) {
+        var modal = $modal.open({
+            templateUrl: 'views/routes/item.html',
+            controller: EditRouteModalController,
+            resolve: {
+                route: function () {
+                    return route;
+                }
+            }
+        });
+
+        modal.result.then(function (updatedRoute) {
+            var index = $scope.routes.indexOf(route);
+            $scope.routes.splice(index, 1, updatedRoute);
         });
     };
 
@@ -32,34 +49,78 @@ angular.module('autostop.routes').controller('RoutesController', ['$scope', '$lo
     };
 
     function CreateRouteModalController($scope, $modalInstance) {
+        $scope.mode = 'create'
         $scope.route = {};
 
-        $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
+        $scope.title = function () {
+            var route = $scope.route;
 
-        $scope.title = function (origin, destination) {
-            if (origin && destination) {
-                return origin + ' - ' + destination;
+            if (route.origin && route.destination) {
+                return route.origin.text + ' - ' + route.destination.text;
             }
         };
 
-        $scope.create = function (route, title) {
+        $scope.ok = function () {
+            var route = $scope.route;
             var origin = route.origin.id ?
                 route.origin.id : { title: route.origin.text };
-
             var destination = route.destination.id ?
                 route.destination.id : { title: route.destination.text };
 
             route = new Routes({
                 origin: origin,
                 destination: destination,
-                title: title
+                title: $scope.title()
             });
 
             route.$save(function (route) {
                 $modalInstance.close(route);
             });
+
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }
+
+    function EditRouteModalController($scope, $modalInstance, route) {
+        $scope.mode = 'edit';
+
+        $scope.route = {
+            id: route._id,
+            origin: { id: route.origin._id, text: route.origin.title },
+            destination: { id: route.destination._id, text: route.destination.title }
+        };
+
+        $scope.title = function () {
+            var route = $scope.route;
+
+            if (route.origin && route.destination) {
+                return route.origin.text + ' - ' + route.destination.text;
+            }
+        };
+
+        $scope.ok = function () {
+            var route = $scope.route;
+            var origin = route.origin.id ?
+                route.origin.id : { title: route.origin.text };
+            var destination = route.destination.id ?
+                route.destination.id : { title: route.destination.text };
+
+            route = new Routes({
+                origin: origin,
+                destination: destination,
+                title: $scope.title()
+            });
+
+            route.$update({ routeId: $scope.route.id }, function (route) {
+                $modalInstance.close(route);
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
         };
     }
 
