@@ -11,7 +11,7 @@ var ServiceHelper = function (server) {
                 username: 'Username' + uuid.v1(),
                 email: 'Email@host.com' + uuid.v1(),
                 password: 'Password',
-                phone: 'cell +7 966 123-4567'
+                phone: 'phone'
             }, source);
         },
         getUpdateData: function () {

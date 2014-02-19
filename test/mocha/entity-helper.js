@@ -12,7 +12,7 @@ function user() {
         email: 'User email',
         username: uuid.v1(),
         password: 'User password',
-        phone: 'phone 123'
+        phone: 'phone'
     });
 }
 
