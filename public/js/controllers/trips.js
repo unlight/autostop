@@ -58,6 +58,23 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
         });
     };
 
+    $scope.cancel = function (trip) {
+        var modal = $modal.open({
+            templateUrl: 'views/trips/cancel.html',
+            controller: CancelTripModalController,
+            resolve: {
+                trip: function () {
+                    return trip;
+                }
+            }
+        });
+
+        modal.result.then(function () {
+            var index = $scope.trips.indexOf(trip);
+            $scope.trips.splice(index, 1);
+        });
+    };
+
     function CreateTripModalController($scope, $modalInstance, route) {
         $scope.route = route;
         $scope.trip = {
@@ -111,6 +128,20 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
 
             trip.$update({ tripId: $scope.trip._id }, function (trip) {
                 $modalInstance.close(trip);
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }
+
+    function CancelTripModalController($scope, $modalInstance, trip) {
+        $scope.trip = trip;
+
+        $scope.ok = function () {
+            trip.$delete(function () {
+                $modalInstance.close();
             });
         };
 

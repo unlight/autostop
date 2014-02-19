@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h3>Подтверждение отмены поездки</h3>
+</div>
+
+<div class="modal-body">
+    <p>
+        Отменить поездку по маршруту <strong>{{trip.route.title}}</strong>
+        {{trip.start | date:'medium'}} ?
+    </p>
+</div>
+
+<div class="modal-footer">
+    <input class="btn btn-danger" type="button" value="Отменить" ng-click="ok()">
+    <input class="btn btn-default" value="Нет, закрыть окно" type="button" ng-click="cancel()"/>
+</div>
