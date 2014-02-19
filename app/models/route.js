@@ -20,15 +20,13 @@ var RouteSchema = new Schema({
         required: true
     },
     origin: {
-        type: String,
-        default: '',
-        trim: true,
+        type: Schema.Types.ObjectId,
+        ref: 'Location',
         required: true
     },
     destination: {
-        type: String,
-        default: '',
-        trim: true,
+        type: Schema.Types.ObjectId,
+        ref: 'Location',
         required: true
     },
     description: {
@@ -82,7 +80,7 @@ RouteSchema.methods.deactivate = function (callback) {
 
 RouteSchema.statics.load = function (id, cb) {
     this.findById(id)
-        .populate('creator')
+        .populate('creator origin destination')
         .exec(cb);
 };
 
@@ -110,7 +108,7 @@ RouteSchema.statics.search = function (searchData, callback) {
 
     this.find(searchCriteria)
         .sort(sortCriteria)
-        .populate('creator')
+        .populate('creator origin destination')
         .exec(callback);
 };
 

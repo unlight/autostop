@@ -16,6 +16,9 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'public/lib/jquery/dist/jquery.js',
+            'public/lib/underscore/underscore.js',
+            'public/lib/select2/select2.js',
             'public/lib/angular/angular.js',
             'public/lib/angular-mocks/angular-mocks.js',
             'public/lib/angular-cookies/angular-cookies.js',
@@ -24,6 +27,7 @@ module.exports = function(config) {
             'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
             'public/lib/angular-bootstrap/ui-bootstrap.js',
             'public/lib/angular-ui-utils/ui-utils.js',
+            'public/lib/angular-ui-select2/src/select2.js',
             'public/js/app.js',
             'public/js/config.js',
             'public/js/directives.js',

@@ -17,23 +17,26 @@ function user() {
 }
 
 function route() {
-    var Route = mongoose.model('Route');
+    var Route = mongoose.model('Route'),
+        creator = user(),
+        origin = location({creator: creator}),
+        destination = location({creator: creator});
 
     return new Route({
         title: 'Route title',
-        origin: 'Origin',
-        destination: 'Destination',
-        creator: user()
+        origin: origin,
+        destination: destination,
+        creator: creator
     });
 }
 
-function location() {
+function location(source) {
     var Location = mongoose.model('Location');
 
-    return new Location({
+    return _.extend(new Location({
         title: 'Location',
         creator: user._id
-    });
+    }), source);
 }
 
 function trip() {
@@ -57,7 +60,8 @@ exports.location = function (source) {
 };
 
 exports.route = function (source) {
-    return _.extend(route(), source);
+    source = source || {};
+    return _.extend(route({creator: source.creator}), source);
 };
 
 exports.trip = function (source) {

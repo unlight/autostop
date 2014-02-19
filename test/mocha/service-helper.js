@@ -34,10 +34,10 @@ var ServiceHelper = function (server) {
     };
 
     this.location = {
-        getCreateData: function () {
-            return {
+        getCreateData: function (source) {
+            return _.extend({
                 title: 'Location'
-            };
+            }, source);
         },
         create: function (userId, done) {
             var createData = this.getCreateData();
@@ -52,22 +52,21 @@ var ServiceHelper = function (server) {
     };
 
     this.route = {
-        getCreateData: function () {
-            return {
-                title: 'Title',
-                origin: 'Origin',
-                destination: 'Destination'
-            };
+        getCreateData: function (source) {
+            return _.extend({
+                title: 'Title'
+            }, source);
         },
-        getUpdateData: function () {
-            return {
-                title: 'Title' + uuid.v1(),
-                origin: 'Origin' + uuid.v1(),
-                destination: 'Destination' + uuid.v1()
-            };
+        getUpdateData: function (source) {
+            return _.extend({
+                title: 'Title' + uuid.v1()
+            }, source);
         },
-        create: function (userId, done) {
-            var createData = this.getCreateData();
+        create: function (userId, locationId, done) {
+            var createData = this.getCreateData({
+                origin: locationId,
+                destination: locationId
+            });
 
             server.post('/api/routes')
                 .set('userId', userId)
