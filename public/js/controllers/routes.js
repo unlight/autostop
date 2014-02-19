@@ -1,7 +1,9 @@
 'use strict';
 
-angular.module('autostop.routes').controller('RoutesController', ['$scope', '$rootScope', '$log', '$modal', 'Locations', 'Routes', function ($scope, $rootScope, $log, $modal, Locations, Routes) {
-    $scope.routes = Routes.query();
+angular.module('autostop.routes').controller('RoutesController', ['$scope', '$rootScope', '$log', '$modal', 'Global', 'Locations', 'Routes', function ($scope, $rootScope, $log, $modal, Global, Locations, Routes) {
+    $scope.routes = Routes.query({
+        creator: Global.user._id
+    });
 
     $scope.add = function () {
         var modal = $modal.open({

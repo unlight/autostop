@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('autostop.trips').controller('TripsController', [ '$scope', '$rootScope', '$modal', 'Trips', function ($scope, $rootScope, $modal, Trips) {
+angular.module('autostop.trips').controller('TripsController', [ '$scope', '$rootScope', '$modal', 'Global', 'Trips', function ($scope, $rootScope, $modal, Global, Trips) {
     function getNextHour() {
         var now = new Date();
         return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0);
@@ -18,7 +18,9 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
         return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, date.getHours(), date.getMinutes());
     }
 
-    $scope.trips = Trips.query();
+    $scope.trips = Trips.query({
+        creator: Global.user._id
+    });
 
     $rootScope.$on('trip-create-request', function (ev, data) {
         $scope.create(data.route);
