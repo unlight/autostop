@@ -34,13 +34,13 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
         };
 
         $scope.today = function () {
-            var start = $scope.trip.start;
+            var start = $scope.trip.start || getNextHour();
             var now = new Date();
             $scope.trip.start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), start.getHours(), start.getMinutes());
         };
 
         $scope.tomorrow = function () {
-            var start = $scope.trip.start;
+            var start = $scope.trip.start || getNextHour();
             var now = new Date();
             $scope.trip.start = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, start.getHours(), start.getMinutes());
         };
