@@ -1,6 +1,11 @@
 'use strict';
 
 angular.module('autostop.trips').controller('TripsController', [ '$scope', '$rootScope', '$modal', 'Trips', function ($scope, $rootScope, $modal, Trips) {
+    function getNextHour() {
+        var now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0);
+    }
+    
     $scope.trips = Trips.query();
 
     $rootScope.$on('trip-create-request', function (ev, data) {
@@ -20,7 +25,7 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
 
         modal.result.then(function (trip) {
             $scope.trips.splice(0, 0, trip);
-            $scope.trips.splice()
+            $scope.trips.splice();
         });
     };
 
@@ -55,10 +60,5 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-
-        function getNextHour() {
-            var now = new Date();
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0);
-        }
     }
 }]);
