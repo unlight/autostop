@@ -10,13 +10,13 @@ angular.module('autostop.trips').controller('TripsController', [ '$scope', '$roo
         var now = new Date();
         date = date || getNextHour();
         return new Date(now.getFullYear(), now.getMonth(), now.getDate(), date.getHours(), date.getMinutes());
-    };
+    }
 
     function tomorrow(date) {
         var now = new Date();
         date = date || getNextHour();
         return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, date.getHours(), date.getMinutes());
-    };
+    }
 
     $scope.trips = Trips.query();
 
