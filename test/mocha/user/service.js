@@ -44,7 +44,10 @@ describe('User service', function () {
         it('should fail when required field "phone" is omitted', function(done){
             var user = service.user.getCreateData();
             user.phone = '  ';
-            server.post('/api/users').send(user).expect(500).end(done);
+            server.post('/api/users')
+                .send(user)
+                .expect(500)
+                .end(done);
         });
     });
 
