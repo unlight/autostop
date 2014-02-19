@@ -40,6 +40,12 @@ describe('User service', function () {
                     user.car.seats.should.equal(5);
                 });
         });
+
+        it('should fail when required field "phone" is omitted', function(done){
+            var user = service.user.getCreateData();
+            user.phone = '  ';
+            server.post('/api/users').send(user).expect(500).end(done);
+        });
     });
 
     describe('GET /users', function () {
@@ -130,5 +136,6 @@ describe('User service', function () {
                 }
             ], done);
         });
+
     });
 });

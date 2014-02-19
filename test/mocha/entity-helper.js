@@ -11,7 +11,8 @@ function user() {
         name: 'User name',
         email: 'User email',
         username: uuid.v1(),
-        password: 'User password'
+        password: 'User password',
+        phone: 'phone 123'
     });
 }
 

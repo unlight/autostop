@@ -30,6 +30,11 @@ var UserSchema = new Schema({
             number: String
         }
     },
+    phone: {
+        type:String,
+        required:true,
+        trim:true
+    },
     hashed_password: String,
     provider: String,
     salt: String,
