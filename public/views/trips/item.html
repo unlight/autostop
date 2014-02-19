@@ -1,0 +1,39 @@
+<form class="form-horizontal" ng-submit="ok()">
+    <div class="modal-header">
+        <h3>Планирование поездки</h3>
+        <h4>{{route.title}}</h4>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="startDate">Дата отправления:</label>
+
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="startDate" datepicker-popup="dd-MMMM-yyyy" ng-model="trip.start"
+                           ng-required="true"/>
+                    <span class="input-group-addon" ng-click="today()">Сегодня</span>
+                    <span class="input-group-addon" ng-click="tomorrow()">Завтра</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="startTime">Время отправления:</label>
+            <timepicker id="startTime" ng-model="trip.start"></timepicker>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="note">Дополнительная информация:</label>
+
+            <div class="col-sm-8">
+                <textarea class="form-control" id="note"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Не сохранять изменения и закрыть окно</button>
+    </div>
+</form>

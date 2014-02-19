@@ -28,6 +28,12 @@
 
     <div ng-controller="TripsController">
         <h2>Запланированные поездки</h2>
+        <ul>
+            <li ng-repeat="trip in trips">
+                <h4>{{trip.route.title}}</h4>
+                Отправление: <strong>{{trip.start | date:medium}}</strong>
+            </li>
+        </ul>
     </div>
 
 </section>
