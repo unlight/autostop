@@ -33,6 +33,7 @@ module.exports = function(config) {
             'public/js/directives.js',
             'public/js/filters.js',
             'public/js/services/global.js',
+            'public/js/services/calendar.js',
             'public/js/services/articles.js',
             'public/js/controllers/articles.js',
             'public/js/controllers/index.js',
@@ -44,7 +45,6 @@ module.exports = function(config) {
 
         // list of files to exclude
         exclude: [
-
         ],
 
 
