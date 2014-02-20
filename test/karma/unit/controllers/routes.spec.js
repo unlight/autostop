@@ -27,7 +27,7 @@ describe('RoutesController', function () {
                 .respond([{ _id: '1', title: 'Route title' }]);
         }));
 
-        it('should populate routes on load for current user', function (done) {
+        it('should populate routes on load for current user', function () {
             $httpBackend.flush();
             expect(scope.routes.length).toEqual(1);
         });

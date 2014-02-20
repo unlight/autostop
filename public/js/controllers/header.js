@@ -1,18 +1,20 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('autostop.system').controller('HeaderController', ['$scope', 'Global', function ($scope, Global) {
-    $scope.global = Global;
+    angular.module('autostop.system').controller('HeaderController', ['$scope', 'Global', function ($scope, Global) {
+        $scope.global = Global;
 
-    $scope.menu = [
-//        {
-//            'title': 'Articles',
-//            'link': 'articles'
-//        },
-//        {
-//            'title': 'Create New Article',
-//            'link': 'articles/create'
-//        }
-    ];
+        $scope.menu = [
+            //        {
+            //            'title': 'Articles',
+            //            'link': 'articles'
+            //        },
+            //        {
+            //            'title': 'Create New Article',
+            //            'link': 'articles/create'
+            //        }
+        ];
 
-    $scope.isCollapsed = false;
-}]);
+        $scope.isCollapsed = false;
+    }]);
+})();
