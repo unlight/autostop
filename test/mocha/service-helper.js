@@ -10,7 +10,8 @@ var ServiceHelper = function (server) {
                 name: 'Name',
                 username: 'Username' + uuid.v1(),
                 email: 'Email@host.com' + uuid.v1(),
-                password: 'Password'
+                password: 'Password',
+                phone: 'phone'
             }, source);
         },
         getUpdateData: function () {

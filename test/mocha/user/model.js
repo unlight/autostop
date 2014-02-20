@@ -17,13 +17,15 @@ describe('Model User:', function () {
             name: 'Full name',
             email: 'test@test.com',
             username: 'user',
-            password: 'password'
+            password: 'password',
+            phone: 'phone number'
         });
         user2 = new User({
             name: 'Full name',
             email: 'test@test.com',
             username: 'user',
-            password: 'password'
+            password: 'password',
+            phone: 'phone number'
         });
 
         User.remove({}, done);
@@ -81,6 +83,15 @@ describe('Model User:', function () {
                 done();
             });
         });
+
+        it('should show err when required field "phone" is omitted', function (done) {
+            user.phone = '';
+            return user.save(function(err) {
+                should.exist(err);
+                done();
+            });
+        });
+
     });
 
     describe('Method update', function () {
