@@ -25,6 +25,7 @@
         "require",
         "exports",
         "module",
+        "jasmine",
         "describe",
         "xdescribe",
         "before",
