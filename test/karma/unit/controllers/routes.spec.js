@@ -83,7 +83,7 @@ describe('RouteListController', function () {
             });
 
             //Act
-            $scope.add();
+            $scope.create();
 
             //Assert
             expect($modalMock.open).toHaveBeenCalled();
@@ -111,7 +111,7 @@ describe('RouteListController', function () {
 
             //Act
             $httpBackend.flush();
-            $scope.add();
+            $scope.create();
             defer.resolve(route);
             $scope.$digest();
 
