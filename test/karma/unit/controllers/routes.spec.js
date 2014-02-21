@@ -1,6 +1,6 @@
 'use strict';
 
-describe('RoutesController', function () {
+describe('RouteListController', function () {
     var $controller,
         $rootScope,
         $httpBackend,
@@ -18,23 +18,23 @@ describe('RoutesController', function () {
     it('should be defined', function () {
         //Arrange
         var $scope = $rootScope.$new(),
-            RoutesController = $controller('RoutesController', {
+            RouteListController = $controller('RouteListController', {
                 $scope: $scope,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
 
         //Assert
-        expect(RoutesController).toBeDefined();
+        expect(RouteListController).toBeDefined();
     });
 
     describe('routes list', function () {
         var $scope,
-            RoutesController;
+            RouteListController;
 
         beforeEach(function () {
             $scope = $rootScope.$new();
 
-            RoutesController = $controller('RoutesController', {
+            RouteListController = $controller('RouteListController', {
                 $scope: $scope,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
@@ -60,7 +60,7 @@ describe('RoutesController', function () {
         });
     });
 
-    describe('create new route dialog', function () {
+    describe('create new route modal', function () {
         var $modalMock,
             $scope,
             defer;
@@ -76,7 +76,7 @@ describe('RoutesController', function () {
 
         it('should be able to open', function () {
             //Arrange
-            $controller('RoutesController', {
+            $controller('RouteListController', {
                 $scope: $scope,
                 $modal: $modalMock,
                 Global: { user: { _id: '1', name: 'Pavel'}}
@@ -87,11 +87,17 @@ describe('RoutesController', function () {
 
             //Assert
             expect($modalMock.open).toHaveBeenCalled();
+            var args = $modalMock.open.mostRecentCall.args;
+            expect(args.length).toEqual(1);
+            var modalOptions = args[0];
+            console.log(modalOptions.controller);
+            expect(modalOptions.controller).toEqual('RouteCreateController');
+            expect(modalOptions.templateUrl).toEqual('views/routes/item.html');
         });
 
         it('should pass created route back to scope', function () {
             //Arrange
-            $controller('RoutesController', {
+            $controller('RouteListController', {
                 $scope: $scope,
                 $modal: $modalMock,
                 Global: { user: { _id: '1', name: 'Pavel'}}

@@ -40,7 +40,8 @@ module.exports = function(config) {
             'public/js/services/trips.js',
             'public/js/controllers/index.js',
             'public/js/controllers/header.js',
-            'public/js/controllers/routes.js',
+            'public/js/controllers/routes/list.js',
+            'public/js/controllers/routes/create.js',
             'public/js/controllers/trips.js',
             'public/js/init.js',
             'test/karma/unit/**/*.js'

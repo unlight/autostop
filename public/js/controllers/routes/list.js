@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('autostop.routes').controller('RoutesController',
+    angular.module('autostop.routes').controller('RouteListController',
         ['$scope', '$rootScope', '$log', '$modal', 'Global', 'Locations', 'Routes',
             function ($scope, $rootScope, $log, $modal, Global, Locations, Routes) {
                 $scope.routes = Routes.query({
@@ -11,7 +11,7 @@
                 $scope.add = function () {
                     var modal = $modal.open({
                         templateUrl: 'views/routes/item.html',
-                        controller: CreateRouteModalController
+                        controller: 'RouteCreateController'
                     });
 
                     modal.result.then(function (route) {
@@ -56,42 +56,6 @@
                 $scope.createTrip = function (route) {
                     $rootScope.$broadcast('trip-create-request', { route: route});
                 };
-
-                function CreateRouteModalController($scope, $modalInstance) {
-                    $scope.mode = 'create';
-                    $scope.route = {};
-
-                    $scope.title = function () {
-                        var route = $scope.route;
-
-                        if (route.origin && route.destination) {
-                            return route.origin.text + ' - ' + route.destination.text;
-                        }
-                    };
-
-                    $scope.ok = function () {
-                        var route = $scope.route;
-                        var origin = route.origin.id ?
-                            route.origin.id : { title: route.origin.text };
-                        var destination = route.destination.id ?
-                            route.destination.id : { title: route.destination.text };
-
-                        route = new Routes({
-                            origin: origin,
-                            destination: destination,
-                            title: $scope.title()
-                        });
-
-                        route.$save(function (route) {
-                            $modalInstance.close(route);
-                        });
-
-                    };
-
-                    $scope.cancel = function () {
-                        $modalInstance.dismiss('cancel');
-                    };
-                }
 
                 function EditRouteModalController($scope, $modalInstance, route) {
                     $scope.mode = 'edit';
