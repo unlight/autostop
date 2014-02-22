@@ -30,12 +30,12 @@
 
         it('should properly generate route\'s title', function () {
             //Arrange
-            var scope = $rootScope.$new(),
-                controller = $controller(controllerName, {
-                    scope: scope,
-                    modalInstance: {},
-                    Global: {}
-                });
+            var scope = $rootScope.$new();
+            $controller(controllerName, {
+                scope: scope,
+                modalInstance: {},
+                Global: {}
+            });
 
             //Act
             scope.route = {
@@ -65,12 +65,12 @@
 
         it('should be able to create route from predefined locations', function () {
             //Arrange
-            var scope = $rootScope.$new(),
-                controller = $controller(controllerName, {
-                    scope: scope,
-                    modalInstance: { close: jasmine.createSpy() },
-                    Global: { user: { _id: '1' } }
-                });
+            var scope = $rootScope.$new();
+            $controller(controllerName, {
+                scope: scope,
+                modalInstance: { close: jasmine.createSpy() },
+                Global: { user: { _id: '1' } }
+            });
 
             scope.route = {
                 origin: { id: '3', text: 'Location A' },
@@ -94,12 +94,12 @@
 
         it('should be able to create route from new locations', function () {
             //Arrange
-            var scope = $rootScope.$new(),
-                controller = $controller(controllerName, {
-                    scope: scope,
-                    modalInstance: { close: jasmine.createSpy() },
-                    Global: { user: { _id: '1' } }
-                });
+            var scope = $rootScope.$new();
+            $controller(controllerName, {
+                scope: scope,
+                modalInstance: { close: jasmine.createSpy() },
+                Global: { user: { _id: '1' } }
+            });
 
             scope.route = {
                 origin: { text: 'Location A' },
@@ -121,16 +121,16 @@
             $httpBackend.verifyNoOutstandingRequest();
         });
 
-        it('should wait when route is created and then close the modal', function () {
+        it('should wait until route is created and then close the modal', function () {
             //Arrange
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['close']),
-                controller = $controller(controllerName, {
-                    scope: scope,
-                    modalInstance: modalInstance,
-                    Global: {}
-                }),
                 route = { _id: 1 };
+            $controller(controllerName, {
+                scope: scope,
+                modalInstance: modalInstance,
+                Global: {}
+            });
 
             scope.route = {
                 origin: { id: 1 },
@@ -155,7 +155,7 @@
             //Arrange
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['dismiss']);
-            var controller = $controller(controllerName, {
+            $controller(controllerName, {
                 scope: scope,
                 modalInstance: modalInstance,
                 Global: { user: {} }

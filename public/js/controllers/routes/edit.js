@@ -7,7 +7,7 @@
                 $scope.mode = 'edit';
 
                 $scope.route = {
-                    id: route._id,
+                    _id: route._id,
                     origin: { id: route.origin._id, text: route.origin.title },
                     destination: { id: route.destination._id, text: route.destination.title }
                 };
@@ -33,7 +33,7 @@
                         title: $scope.title()
                     });
 
-                    route.$update({ routeId: $scope.route.id }, function (route) {
+                    route.$update({ routeId: $scope.route._id }, function (route) {
                         $modalInstance.close(route);
                     });
                 };
