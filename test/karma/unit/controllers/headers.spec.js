@@ -12,7 +12,7 @@
                 scope = $rootScope.$new();
 
                 HeaderController = $controller('HeaderController', {
-                    $scope: scope
+                    scope: scope
                 });
             }));
 

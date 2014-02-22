@@ -35,7 +35,7 @@
                 scope = $rootScope.$new();
 
                 ArticlesController = $controller('ArticlesController', {
-                    $scope: scope
+                    scope: scope
                 });
 
                 $routeParams = _$routeParams_;
@@ -46,7 +46,7 @@
 
             }));
 
-            it('$scope.find() should create an array with at least one article object ' +
+            it('scope.find() should create an array with at least one article object ' +
                 'fetched from XHR', function() {
 
                     // test expected GET request
@@ -67,7 +67,7 @@
 
                 });
 
-            it('$scope.findOne() should create an array with one article object fetched ' +
+            it('scope.findOne() should create an array with one article object fetched ' +
                 'from XHR using a articleId URL parameter', function() {
                     // fixture URL parament
                     $routeParams.articleId = '525a8422f6d0f87f0e407a33';
@@ -92,7 +92,7 @@
 
                 });
 
-            it('$scope.create() with valid form data should send a POST request ' +
+            it('scope.create() with valid form data should send a POST request ' +
                 'with the form input values and then ' +
                 'locate to new object URL', function() {
 
@@ -132,7 +132,7 @@
                     expect($location.path()).toBe('/articles/' + responseArticleData()._id);
                 });
 
-            it('$scope.update() should update a valid article', inject(function(Articles) {
+            it('scope.update() should update a valid article', inject(function(Articles) {
 
                 // fixture rideshare
                 var putArticleData = function() {
@@ -169,7 +169,7 @@
 
             }));
 
-            it('$scope.remove() should send a DELETE request with a valid articleId' +
+            it('scope.remove() should send a DELETE request with a valid articleId' +
                 'and remove the article from the scope', inject(function(Articles) {
 
                     // fixture rideshare

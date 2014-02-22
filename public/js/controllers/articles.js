@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('autostop.articles').controller('ArticlesController', ['$scope', '$routeParams', '$location', 'Global', 'Articles', function ($scope, $routeParams, $location, Global, Articles) {
+    angular.module('autostop.articles').controller('ArticlesController', ['scope', '$routeParams', '$location', 'Global', 'Articles', function ($scope, $routeParams, $location, Global, Articles) {
         $scope.global = Global;
 
         $scope.create = function () {

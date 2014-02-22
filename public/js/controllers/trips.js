@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('autostop.trips').controller('TripsController',
-        [ '$scope', '$rootScope', '$modal', 'Global', 'Calendar', 'Trips',
+        [ 'scope', '$rootScope', '$modal', 'Global', 'Calendar', 'Trips',
             function ($scope, $rootScope, $modal, Global, Calendar, Trips) {
                 $scope.trips = Trips.query({
                     creator: Global.user._id

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('autostop.users').controller('SigninController', ['$scope', '$modal', '$log', 'Users', function ($scope, $modal, $log, Users) {
+    angular.module('autostop.users').controller('SigninController', ['scope', '$modal', '$log', 'Users', function ($scope, $modal, $log, Users) {
         $scope.open = function () {
 
             $modal.open({

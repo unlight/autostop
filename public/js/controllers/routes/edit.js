@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('autostop.routes').controller('RouteEditController',
-        ['$scope', '$modalInstance', 'Routes', 'route',
+        ['scope', 'modalInstance', 'Routes', 'route',
             function ($scope, $modalInstance, Routes, route) {
                 $scope.mode = 'edit';
 

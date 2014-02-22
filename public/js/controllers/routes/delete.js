@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('autostop.routes').controller('RouteDeleteController',
-        ['$scope', '$modalInstance', 'route',
+        ['scope', 'modalInstance', 'route',
             function ($scope, $modalInstance, route) {
                 $scope.route = route;
 

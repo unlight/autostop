@@ -19,7 +19,7 @@ describe('RouteListController', function () {
         //Arrange
         var $scope = $rootScope.$new(),
             RouteListController = $controller('RouteListController', {
-                $scope: $scope,
+                scope: $scope,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
 
@@ -35,7 +35,7 @@ describe('RouteListController', function () {
             $scope = $rootScope.$new();
 
             RouteListController = $controller('RouteListController', {
-                $scope: $scope,
+                scope: $scope,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
         });
@@ -77,7 +77,7 @@ describe('RouteListController', function () {
         it('should be able to open', function () {
             //Arrange
             $controller('RouteListController', {
-                $scope: $scope,
+                scope: $scope,
                 $modal: $modalMock,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
@@ -98,7 +98,7 @@ describe('RouteListController', function () {
         it('should pass created route back to scope', function () {
             //Arrange
             $controller('RouteListController', {
-                $scope: $scope,
+                scope: $scope,
                 $modal: $modalMock,
                 Global: { user: { _id: '1', name: 'Pavel'}}
             });
