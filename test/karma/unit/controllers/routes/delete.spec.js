@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var controllerName = 'RouteEditController';
+    var controllerName = 'RouteDeleteController';
 
     describe(controllerName, function () {
 
@@ -64,10 +64,8 @@
 
             //Assert
             expect(scope.route._id).toEqual(route._id);
-            expect(scope.route.origin.id).toEqual(route.origin._id);
-            expect(scope.route.origin.text).toEqual(route.origin.title);
-            expect(scope.route.destination.id).toEqual(route.destination._id);
-            expect(scope.route.destination.text).toEqual(route.destination.title);
+            expect(scope.route.origin.title).toEqual(route.origin.title);
+            expect(scope.route.destination.title).toEqual(route.destination.title);
         });
 
         xit('should properly display route\'s title', function () {
@@ -91,7 +89,7 @@
             expect(modalInstance.dismiss).toHaveBeenCalledWith('cancel');
         });
 
-        it('should close modal on save', function () {
+        it('should close modal on delete', function () {
             //Arrange
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['close']);
@@ -100,8 +98,8 @@
                 modalInstance: modalInstance,
                 route: route
             });
-            $httpBackend.whenPUT('/api/routes/' + route._id)
-                .respond(route);
+            $httpBackend.whenDELETE('/api/routes/' + route._id)
+                .respond();
 
             //Act
             scope.ok();
@@ -109,11 +107,9 @@
 
             //Assert
             expect(modalInstance.close).toHaveBeenCalled();
-            var routeResource = modalInstance.close.mostRecentCall.args[0];
-            expect(routeResource._id).toEqual(route._id);
         });
 
-        it('should update route using predefined locations', function () {
+        it('should delete route', function () {
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
@@ -126,34 +122,8 @@
             scope.ok();
 
             //Assert
-            $httpBackend.expectPUT('/api/routes/' + route._id, {
-                title: route.origin.title + ' - ' + route.destination.title,
-                origin: route.origin._id,
-                destination: route.destination._id
-            }).respond();
-            $httpBackend.flush();
-        });
-
-        it('should update route using new locations', function () {
-            //Arrange
-            var scope = $rootScope.$new();
-            $controller(controllerName, {
-                scope: scope,
-                modalInstance: jasmine.createSpyObj('modal', ['close']),
-                route: route
-            });
-            scope.route.origin.id = null;
-            scope.route.destination.id = null;
-
-            //Act
-            scope.ok();
-
-            //Assert
-            $httpBackend.expectPUT('/api/routes/' + route._id, {
-                title: route.origin.title + ' - ' + route.destination.title,
-                origin: { title: route.origin.title },
-                destination: { title: route.destination.title }
-            }).respond();
+            $httpBackend.expectDELETE('/api/routes/' + route._id)
+                .respond();
             $httpBackend.flush();
         });
     });
