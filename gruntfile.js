@@ -100,5 +100,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask('mocha', ['env:test', 'jshint', 'mochaTest']);
 
-    grunt.registerTask('mocha', ['env:test', 'jshint', 'karma']);
+    grunt.registerTask('karma-unit', ['env:test', 'jshint', 'karma:unit']);
 };

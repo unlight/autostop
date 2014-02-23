@@ -13,11 +13,9 @@
                 };
 
                 $scope.title = function () {
-                    var route = $scope.route;
-
-                    if (route.origin && route.destination) {
-                        return route.origin.text + ' - ' + route.destination.text;
-                    }
+                    var origin = $scope.route.origin && $scope.route.origin.text,
+                        destination = $scope.route.destination && $scope.route.destination.text;
+                    return Routes.title(origin, destination);
                 };
 
                 $scope.ok = function () {

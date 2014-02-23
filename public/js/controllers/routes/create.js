@@ -10,9 +10,9 @@
                 $scope.title = function () {
                     var route = $scope.route;
 
-                    if (route.origin && route.destination) {
-                        return route.origin.text + ' - ' + route.destination.text;
-                    }
+                    var origin = route.origin && route.origin.text,
+                        destination = route.destination && route.destination.text;
+                    return Routes.title(origin, destination);
                 };
 
                 $scope.ok = function () {

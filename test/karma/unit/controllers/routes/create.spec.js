@@ -8,14 +8,28 @@
         var $controller,
             $rootScope,
             $httpBackend,
-            $q;
+            $q,
+            Routes,
+            route;
 
         beforeEach(module('autostop.routes'));
-        beforeEach(inject(function (_$controller_, _$rootScope_, _$httpBackend_, _$q_) {
+        beforeEach(inject(function (_$controller_, _$rootScope_, _$httpBackend_, _$q_, _Routes_) {
             $controller = _$controller_;
             $rootScope = _$rootScope_;
             $httpBackend = _$httpBackend_;
             $q = _$q_;
+            Routes = _Routes_;
+
+            route = {
+                origin: {
+                    id: '1',
+                    text: 'Origin location'
+                },
+                destination: {
+                    id: '2',
+                    text: 'Destination location'
+                }
+            };
         }));
 
         it('should be defined', function () {
@@ -36,31 +50,13 @@
                 modalInstance: {},
                 Global: {}
             });
+            scope.route = route;
 
             //Act
-            scope.route = {
-                origin: { text: 'Location A' }
-            };
-            //Assert
             var title = scope.title();
-            expect(title).toBeFalsy();
 
-            //Act
-            scope.route = {
-                destination: { text: 'Location B' }
-            };
             //Assert
-            title = scope.title();
-            expect(title).toBeFalsy();
-
-            //Act
-            scope.route = {
-                origin: { text: 'Location A' },
-                destination: { text: 'Location B' }
-            };
-            //Assert
-            title = scope.title();
-            expect(title).toEqual(scope.route.origin.text + ' - ' + scope.route.destination.text);
+            expect(title).toEqual(Routes.title(route.origin.text, route.destination.text));
         });
 
         it('should be able to create route from predefined locations', function () {

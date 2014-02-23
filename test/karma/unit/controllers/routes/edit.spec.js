@@ -10,15 +10,17 @@
             $httpBackend,
             $q,
             Global,
+            Routes,
             route;
 
         beforeEach(module('autostop.routes'));
 
-        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _$q_, Routes) {
+        beforeEach(inject(function (_$rootScope_, _$controller_, _$httpBackend_, _$q_, _Routes_) {
             $rootScope = _$rootScope_;
             $controller = _$controller_;
             $httpBackend = _$httpBackend_;
             $q = _$q_;
+            Routes = _Routes_;
 
             Global = {
                 user: {
@@ -70,8 +72,20 @@
             expect(scope.route.destination.text).toEqual(route.destination.title);
         });
 
-        xit('should properly display route\'s title', function () {
+        it('should properly display route\'s title', function () {
+            //Arrange
+            var scope = $rootScope.$new();
+            $controller(controllerName, {
+                scope: scope,
+                modalInstance: {},
+                route: route
+            });
 
+            //Act
+            var title = scope.title();
+
+            //Assert
+            expect(title).toEqual(Routes.title(route.origin.title, route.destination.title));
         });
 
         it('should dismiss modal on cancel', function () {

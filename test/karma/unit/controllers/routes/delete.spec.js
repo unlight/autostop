@@ -68,10 +68,6 @@
             expect(scope.route.destination.title).toEqual(route.destination.title);
         });
 
-        xit('should properly display route\'s title', function () {
-
-        });
-
         it('should dismiss modal on cancel', function () {
             //Arrange
             var scope = $rootScope.$new(),
