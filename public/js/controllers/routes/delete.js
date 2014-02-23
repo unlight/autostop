@@ -8,7 +8,7 @@
 
                 $scope.ok = function () {
                     route.$delete(function () {
-                        $modalInstance.close(route);
+                        $modalInstance.close();
                     });
                 };
 

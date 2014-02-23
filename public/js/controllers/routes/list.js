@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('autostop.routes').controller('RouteListController',
-        ['scope', '$rootScope', '$modal', 'Global', 'Routes',
+        ['$scope', '$rootScope', '$modal', 'Global', 'Routes',
             function ($scope, $rootScope, $modal, Global, Routes) {
                 $scope.routes = Routes.query({
                     creator: Global.user._id
