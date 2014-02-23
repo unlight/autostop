@@ -129,21 +129,82 @@
             });
         });
 
-        describe('Delete', function () {
-            it('should open confirmation modal', function () {
-                //Arrange
-                var scope = $rootScope.$new(),
-                    modalMock = jasmine.createSpyObj('$modal', ['open']),
-                    route = { _id: 1 };
+        describe('Edit', function () {
+            var scope,
+                modalMock,
+                defer,
+                route;
+
+            beforeEach(function () {
+                scope = $rootScope.$new();
+                route = { _id: 1 };
+                modalMock = jasmine.createSpyObj('$modal', ['open']);
+                defer = $q.defer();
                 modalMock.open.andReturn({
-                    result: $q.defer().promise
+                    result: defer.promise
                 });
+
                 $controller(controllerName, {
                     $scope: scope,
                     $modal: modalMock,
                     Global: GlobalMock
                 });
+            });
 
+            it('should open modal', function () {
+                //Act
+                scope.edit(route);
+
+                //Assert
+                expect(modalMock.open).toHaveBeenCalled();
+                var modalOptions = modalMock.open.mostRecentCall.args[0];
+                expect(modalOptions.controller).toEqual('RouteEditController');
+                expect(modalOptions.templateUrl).toEqual('views/routes/item.html');
+            });
+
+            it('should show updated route', function () {
+                //Arrange
+                var updatedRoute = { _id: route._id, title: 'Updated route'};
+                $httpBackend.whenGET('/api/routes?creator=' + GlobalMock.user._id)
+                    .respond([route]);
+
+                //Act
+                scope.edit(route);
+                $httpBackend.flush();
+                defer.resolve(updatedRoute);
+                scope.$digest();
+
+                //Assert
+                expect(scope.routes.length).toEqual(1);
+                var routeResource = scope.routes[0];
+                expect(routeResource._id).toEqual(updatedRoute._id);
+                expect(routeResource.title).toEqual(updatedRoute.title);
+            });
+        });
+
+        describe('Delete', function () {
+            var scope,
+                modalMock,
+                defer,
+                route;
+
+            beforeEach(function () {
+                scope = $rootScope.$new();
+                route = { _id: 1 };
+                defer = $q.defer();
+                modalMock = jasmine.createSpyObj('$modal', ['open']);
+                modalMock.open.andReturn({
+                    result: defer.promise
+                });
+
+                $controller(controllerName, {
+                    $scope: scope,
+                    $modal: modalMock,
+                    Global: GlobalMock
+                });
+            });
+
+            it('should open confirmation modal', function () {
                 //Act
                 scope.delete(route);
 
@@ -156,21 +217,8 @@
 
             it('should not show deleted route', function () {
                 //Arrange
-                var scope = $rootScope.$new(),
-                    modalMock = jasmine.createSpyObj('$modal', ['open']),
-                    defer = $q.defer(),
-                    route = { _id: 1 };
-                modalMock.open.andReturn({
-                    result: defer.promise
-                });
                 $httpBackend.whenGET('/api/routes?creator=' + GlobalMock.user._id)
                     .respond([ route ]);
-
-                $controller(controllerName, {
-                    $scope: scope,
-                    $modal: modalMock,
-                    Global: GlobalMock
-                });
 
                 //Act
                 $httpBackend.flush();
