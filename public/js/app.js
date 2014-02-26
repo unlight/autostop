@@ -20,6 +20,6 @@
     angular.module('autostop.articles', []);
     angular.module('autostop.users', []);
     angular.module('autostop.locations', []);
-    angular.module('autostop.routes', ['ngResource', 'ui.bootstrap', 'autostop.system', 'autostop.locations', 'autostop.routes']);
+    angular.module('autostop.routes', ['ngResource', 'ui.bootstrap', 'autostop.system', 'autostop.locations']);
     angular.module('autostop.trips', []);
 })();

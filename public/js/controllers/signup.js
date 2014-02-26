@@ -1,10 +1,11 @@
 (function () {
     'use strict';
 
-    angular.module('autostop.users').controller('SignupController', [ 'scope', '$log', '$modal', 'Users', function ($scope, $log, $modal, Users) {
+    angular.module('autostop.users').controller('SignupController', [ '$scope', '$log', '$modal', 'Users', function ($scope, $log, $modal, Users) {
         $scope.user = {};
 
         $scope.open = function () {
+
             $modal.open({
                 templateUrl: 'views/users/signup.html',
                 controller: ModalController,

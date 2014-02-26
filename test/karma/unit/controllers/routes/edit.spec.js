@@ -45,8 +45,8 @@
 
         it('should be defined', function () {
             var controller = $controller(controllerName, {
-                scope: $rootScope.$new(),
-                modalInstance: {},
+                $scope: $rootScope.$new(),
+                $modalInstance: {},
                 route: route
             });
 
@@ -59,8 +59,8 @@
 
             //Act
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: {},
+                $scope: scope,
+                $modalInstance: {},
                 route: route
             });
 
@@ -76,8 +76,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: {},
+                $scope: scope,
+                $modalInstance: {},
                 route: route
             });
 
@@ -93,8 +93,8 @@
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['dismiss']);
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: modalInstance,
+                $scope: scope,
+                $modalInstance: modalInstance,
                 route: route
             });
 
@@ -110,8 +110,8 @@
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['close']);
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: modalInstance,
+                $scope: scope,
+                $modalInstance: modalInstance,
                 route: route
             });
             $httpBackend.whenPUT('/api/routes/' + route._id)
@@ -131,8 +131,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: jasmine.createSpyObj('modal', ['close']),
+                $scope: scope,
+                $modalInstance: jasmine.createSpyObj('modal', ['close']),
                 route: route
             });
 
@@ -152,8 +152,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: jasmine.createSpyObj('modal', ['close']),
+                $scope: scope,
+                $modalInstance: jasmine.createSpyObj('modal', ['close']),
                 route: route
             });
             scope.route.origin.id = null;

@@ -1,6 +1,7 @@
 .DS_Store
 .idea*
 .nodemonignore
+.bower-*
 node_modules/
 npm-debug.log
 public/lib

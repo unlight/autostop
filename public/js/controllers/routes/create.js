@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('autostop.routes').controller('RouteCreateController',
-        ['scope', 'modalInstance', 'Routes',
+        ['$scope', '$modalInstance', 'Routes',
             function ($scope, $modalInstance, Routes) {
                 $scope.mode = 'create';
                 $scope.route = {};

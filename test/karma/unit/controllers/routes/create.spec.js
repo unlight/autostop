@@ -34,8 +34,8 @@
 
         it('should be defined', function () {
             var controller = $controller(controllerName, {
-                scope: $rootScope.$new(),
-                modalInstance: {},
+                $scope: $rootScope.$new(),
+                $modalInstance: {},
                 Global: { user: {} }
             });
 
@@ -46,8 +46,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: {},
+                $scope: scope,
+                $modalInstance: {},
                 Global: {}
             });
             scope.route = route;
@@ -63,8 +63,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: { close: jasmine.createSpy() },
+                $scope: scope,
+                $modalInstance: { close: jasmine.createSpy() },
                 Global: { user: { _id: '1' } }
             });
 
@@ -92,8 +92,8 @@
             //Arrange
             var scope = $rootScope.$new();
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: { close: jasmine.createSpy() },
+                $scope: scope,
+                $modalInstance: { close: jasmine.createSpy() },
                 Global: { user: { _id: '1' } }
             });
 
@@ -123,8 +123,8 @@
                 modalInstance = jasmine.createSpyObj('modal', ['close']),
                 route = { _id: 1 };
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: modalInstance,
+                $scope: scope,
+                $modalInstance: modalInstance,
                 Global: {}
             });
 
@@ -152,8 +152,8 @@
             var scope = $rootScope.$new(),
                 modalInstance = jasmine.createSpyObj('modal', ['dismiss']);
             $controller(controllerName, {
-                scope: scope,
-                modalInstance: modalInstance,
+                $scope: scope,
+                $modalInstance: modalInstance,
                 Global: { user: {} }
             });
 
