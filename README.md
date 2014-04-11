@@ -26,7 +26,6 @@ git clone git@github.com:3dev/autostop.git
 Перейдите в директорию с проектом и выполните:
 
 ```
-cd web
 npm install
 ```
 
