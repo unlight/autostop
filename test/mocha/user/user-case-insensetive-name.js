@@ -1,8 +1,7 @@
-/* jshintx ignore:start */
+/* jshint ignore:start */
 var should = require('should');
 var async = require('async');
 var mongoose = require('mongoose');
-var mocha = require("mocha");
 
 var conf = require("../../../config/env/test.js");
 mongoose.connect(conf.db);
