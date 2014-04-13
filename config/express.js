@@ -24,7 +24,7 @@ module.exports = function (app, passport, db) {
     }));
 
     //Don't use logger for test env
-    if (process.env.NODE_ENV !== 'test') {
+    if (app.get("env") !== 'test') {
         app.use(express.logger('dev'));
     }
 
@@ -61,7 +61,7 @@ module.exports = function (app, passport, db) {
 
             //use passport session
             app.use(passport.initialize());
-            if (process.env.NODE_ENV != 'test') {
+            if (app.get("env") != 'test') {
                 app.use(passport.session());
             }
             else {
