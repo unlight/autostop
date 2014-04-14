@@ -11,9 +11,11 @@
 
 * [MongoDB](http://docs.mongodb.org/manual/installation/). Убедитесь что база данных запущена на порту 27017.
 * [Node.js](http://nodejs.org/download/).
+* [Grunt](http://gruntjs.com/).
 * [Bower](http://bower.io/) - менеджер web-пакетов для Node.js.
 
 ```
+$ npm install -g grunt-cli
 $ npm install -g bower
 ```
 
