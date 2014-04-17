@@ -21,6 +21,7 @@ module.exports = function (app, passport, auth) {
 
 
     app.post(apiUri('/users/signin'), function (req, res, next) {
+        debugger;
         passport.authenticate('local', function (err, user) {
             if (err) {
                 return next(err);
@@ -87,6 +88,8 @@ module.exports = function (app, passport, auth) {
     app.get(apiUri('/users'), usersApi.list);
     app.get(apiUri('/users/:userId'), usersApi.show);
     app.put(apiUri('/users/:userId'), auth.requiresLogin, auth.user.hasAuthorization, usersApi.update);
+
+    app.put(apiUri('/profile'), auth.requiresLogin, auth.user.hasAuthorization, usersApi.updateProfile);
 
     //Article Routes
     var articles = require('../app/controllers/articles');

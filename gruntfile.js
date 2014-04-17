@@ -13,7 +13,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['gruntfile.js', 'server.js', 'app/**/*.js', 'public/js/**', 'test/**/*.js'],
-                tasks: ['jshint'],
+                //tasks: ['jshint'],
                 options: {
                     livereload: true,
                 },
@@ -93,7 +93,9 @@ module.exports = function(grunt) {
     //grunt.option('force', true);
 
     //Default task(s).
-    grunt.registerTask('default', ['jshint', 'concurrent']);
+    // grunt.registerTask('default', ['jshint', 'concurrent']);
+    grunt.registerTask('default', ['concurrent']);
+    grunt.registerTask('default-test', ['env:test', 'concurrent']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'jshint', 'mochaTest', 'karma:unit']);

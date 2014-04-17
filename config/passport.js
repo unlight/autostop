@@ -30,6 +30,7 @@ module.exports = function(passport) {
             passwordField: 'password'
         },
         function(email, password, done) {
+            // TODO: check for email or name
             User.findOne({
                 email: email,
                 provider: "local"

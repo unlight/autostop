@@ -53,6 +53,11 @@ exports.update = function (req, res) {
     });
 };
 
+exports.updateProfile = function(req, res) {
+    console.log(req.user);
+    throw 1;
+}
+
 exports.show = function (req, res) {
     User.findById(new ObjectId(req.params.userId), function (err, user) {
         if (err) {
