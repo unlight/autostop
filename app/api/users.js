@@ -10,10 +10,11 @@ exports.create = function (req, res) {
 
     user.save(function (err) {
         if (err) {
-            res.jsonp(500, err);
+            res.jsonp(500, String(err));
         }
         else {
             return User.findById(user._id, function (err, user) {
+                console.log (arguments);
                 if (err) {
                     res.jsonp(500, err);
                 }
@@ -52,11 +53,6 @@ exports.update = function (req, res) {
         }
     });
 };
-
-exports.updateProfile = function(req, res) {
-    console.log(req.user);
-    throw 1;
-}
 
 exports.show = function (req, res) {
     User.findById(new ObjectId(req.params.userId), function (err, user) {

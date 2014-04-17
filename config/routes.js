@@ -21,7 +21,6 @@ module.exports = function (app, passport, auth) {
 
 
     app.post(apiUri('/users/signin'), function (req, res, next) {
-        debugger;
         passport.authenticate('local', function (err, user) {
             if (err) {
                 return next(err);
@@ -89,7 +88,10 @@ module.exports = function (app, passport, auth) {
     app.get(apiUri('/users/:userId'), usersApi.show);
     app.put(apiUri('/users/:userId'), auth.requiresLogin, auth.user.hasAuthorization, usersApi.update);
 
-    app.put(apiUri('/profile'), auth.requiresLogin, auth.user.hasAuthorization, usersApi.updateProfile);
+    // Profile.
+    var profile = require('../app/api/profile.js');
+    app.get(apiUri('/profile'), auth.requiresLogin, auth.user.hasAuthorization, profile.get);
+    app.put(apiUri('/profile'), auth.requiresLogin, auth.user.hasAuthorization, profile.update);
 
     //Article Routes
     var articles = require('../app/controllers/articles');

@@ -32,8 +32,7 @@ module.exports = function(passport) {
         function(email, password, done) {
             // TODO: check for email or name
             User.findOne({
-                email: email,
-                provider: "local"
+                email: email
             }, function(err, user) {
                 if (err) {
                     return done(err);
