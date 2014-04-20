@@ -15,7 +15,11 @@ var mongoose = require('mongoose'),
  */
 var UserSchema = new Schema({
     name: String,
-    email: String,
+    email: {
+        type: String,
+        lowercase: true,
+        trim: true
+    },
     username: {
         type: String,
         unique: true
@@ -158,6 +162,19 @@ UserSchema.methods = {
         user.car = undefined;
         user.save(done);
     }
+};
+
+/**
+ * Static methods.
+ */
+
+UserSchema.statics.findByLogin = function (login, callback) {
+    this.findByEmail(login, callback);
+};
+
+UserSchema.statics.findByEmail = function (value, callback) {
+    var lowerValue = String(value).toLowerCase();
+    this.findOne({email: lowerValue}).exec(callback);
 };
 
 mongoose.model('User', UserSchema);
