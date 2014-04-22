@@ -1,0 +1,18 @@
+<div ng-controller="TripsController">
+    <h2>Ближайшие поездки</h2>
+
+    <div class="row" ng-repeat="trip in closest">
+        <div class="col-sm-6">
+            <h4>{{trip.route.title}}</h4>
+            <h5>Водитель: {{trip.creator.name}}</h5>
+			<small>{{trip.start | date:'medium'}}</small>
+        </div>
+        <div class="col-sm-6">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" ng-show="isJoined(trip)&&!isDriver(trip)" ng-click="leave(trip)">Не участвовать</button>
+				<button type="button" class="btn btn-default" ng-show="!isJoined(trip)&&!isDriver(trip)" ng-click="join(trip)">Участвовать</button>
+				<button type="button" class="btn btn-default" ng-show="isDriver(trip)" ng-click="cancel(trip)">Отменить поездку</button>
+            </div>
+        </div>
+    </div>
+</div>
