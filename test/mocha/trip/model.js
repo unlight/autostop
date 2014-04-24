@@ -18,15 +18,22 @@ describe('Model Trip', function () {
     var location;
     var route;
     var trip;
+    var passenger1, passenger2;
+    var saveEntity = function(item, next) {
+        item.save(next);
+    };
 
     before(function (done) {
         user = entity.user();
         location = entity.location({creator: user});
         route = entity.route({ creator: user, origin: location._id, destination: location._id });
+        passenger1 = entity.user();
+        passenger2 = entity.user();
 
         async.series({
-            saveUser: function (callback) {
-                user.save(callback);
+            saveUsers: function (callback) {
+                var users = [user];
+                async.map(users, saveEntity, callback);
             },
             saveLocation: function (callback) {
                 location.save(callback);
@@ -38,7 +45,10 @@ describe('Model Trip', function () {
     });
 
     beforeEach(function (done) {
-        trip = entity.trip({ route: route, creator: user });
+        trip = entity.trip({ 
+            route: route, 
+            creator: user
+        });
         done();
     });
 
@@ -454,6 +464,95 @@ describe('Model Trip', function () {
                 for (i = 0; i < tripsDesc.length - 1; i++) {
                     (tripsDesc[i].start >= tripsDesc[i + 1].start).should.be.ok;
                 }
+            });
+        });
+
+        it('should found by startMax criteria', function(done) {
+            var futureDate = new Date();
+            futureDate.setFullYear(futureDate.getFullYear() + 1);
+            var pastDate = new Date();
+            pastDate.setFullYear(pastDate.getFullYear() - 1);
+            tripA.start = futureDate;
+            tripB.start = pastDate;
+
+            async.series({
+                save: function (callback) {
+                    async.map([tripA, tripB], saveEntity, callback);
+                },
+                trips: function (callback) {
+                    Trip.search({startMax: Date.now()}, callback);
+                }
+            }, function (err, results) {
+                results.trips.length.should.equal(1);
+                results.trips[0]._id.should.eql(tripB._id);
+                done(err);
+            });
+        });
+
+        it('should found passenger', function(done) {
+            async.series({
+                passengers: function(callback) {
+                    trip.passengers = [passenger1, passenger2];
+                    async.map([passenger1, passenger2], saveEntity, callback);
+                },
+                save: function(callback) {
+                    trip.save(callback);
+                },
+                items: function(callback) {
+                    // Trip.search({passenger: passenger2._id}, function(err, docs) {
+                    //     User.populate(docs, 'passengers', callback);
+                    // });
+                    Trip.search({passenger: passenger2._id}, callback);
+                },
+            }, function (err, results) {
+                var items = results.items;
+                items[0].passengers.should.containEql(passenger2._id);
+                done();
+            });
+        });
+
+        it('should found creator', function(done) {
+            async.series({
+                save: function(callback) {
+                    trip.save(callback);
+                },
+                items: function(callback) {
+                    Trip.search({creator: user._id}, callback);
+                },
+            }, function (err, results) {
+                var items = results.items;
+                items[0].creator._id.should.be.eql(user._id);
+                done();
+            });
+        });
+
+        it('should found by originLocation', function(done) {
+            async.series({
+                save: function(callback) {
+                    trip.save(callback);
+                },
+                items: function(callback) {
+                    Trip.search({originLocation: location._id}, callback);
+                },
+            }, function (err, results) {
+                var items = results.items;
+                items[0].route.origin.should.be.eql(location._id);
+                done();
+            });
+        });
+
+        it('should found by destinationLocation', function(done) {
+            async.series({
+                save: function(callback) {
+                    trip.save(callback);
+                },
+                items: function(callback) {
+                    Trip.search({destinationLocation: location._id}, callback);
+                },
+            }, function (err, results) {
+                var items = results.items;
+                items[0].route.destination.should.be.eql(location._id);
+                done();
             });
         });
     });
