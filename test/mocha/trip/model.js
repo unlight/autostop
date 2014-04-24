@@ -18,15 +18,22 @@ describe('Model Trip', function () {
     var location;
     var route;
     var trip;
+    var passenger1, passenger2;
 
     before(function (done) {
         user = entity.user();
         location = entity.location({creator: user});
         route = entity.route({ creator: user, origin: location._id, destination: location._id });
+        passenger1 = entity.user();
+        passenger2 = entity.user();
 
         async.series({
-            saveUser: function (callback) {
-                user.save(callback);
+            saveUsers: function (callback) {
+                var users = [user, passenger1, passenger2];
+                var save = function(item, next) {
+                    item.save(next);
+                };
+                async.map(users, save, callback);
             },
             saveLocation: function (callback) {
                 location.save(callback);
@@ -38,7 +45,11 @@ describe('Model Trip', function () {
     });
 
     beforeEach(function (done) {
-        trip = entity.trip({ route: route, creator: user });
+        trip = entity.trip({ 
+            route: route, 
+            creator: user,
+            passengers: [passenger1, passenger2]
+        });
         done();
     });
 
@@ -455,6 +466,11 @@ describe('Model Trip', function () {
                     (tripsDesc[i].start >= tripsDesc[i + 1].start).should.be.ok;
                 }
             });
+        });
+
+        
+        it.only('should', function() {
+            done();
         });
     });
 
