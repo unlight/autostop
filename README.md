@@ -5,6 +5,7 @@
 * [Continuous Integration сервер](https://travis-ci.org/3dev/autostop)
 * [Задачи](https://app.asana.com/0/9761538479759/9761538479763)
 * [Мокапы](http://ninjamock.com/s/xeunme)
+* [Wiki](https://github.com/3dev/autostop/wiki)
 
 ## Установка
 Предварительно необходимо установить:
