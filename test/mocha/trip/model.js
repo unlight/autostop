@@ -32,7 +32,7 @@ describe('Model Trip', function () {
 
         async.series({
             saveUsers: function (callback) {
-                var users = [user, passenger1, passenger2];
+                var users = [user];
                 async.map(users, saveEntity, callback);
             },
             saveLocation: function (callback) {
@@ -490,8 +490,11 @@ describe('Model Trip', function () {
         });
 
         it('should found passenger', function(done) {
-            trip.passengers = [passenger1, passenger2];
             async.series({
+                passengers: function(callback) {
+                    trip.passengers = [passenger1, passenger2];
+                    async.map([passenger1, passenger2], saveEntity, callback);
+                },
                 save: function(callback) {
                     trip.save(callback);
                 },
