@@ -5,15 +5,18 @@
 * [Continuous Integration сервер](https://travis-ci.org/3dev/autostop)
 * [Задачи](https://app.asana.com/0/9761538479759/9761538479763)
 * [Мокапы](http://ninjamock.com/s/xeunme)
+* [Wiki](https://github.com/3dev/autostop/wiki)
 
 ## Установка
 Предварительно необходимо установить:
 
 * [MongoDB](http://docs.mongodb.org/manual/installation/). Убедитесь что база данных запущена на порту 27017.
 * [Node.js](http://nodejs.org/download/).
+* [Grunt](http://gruntjs.com/).
 * [Bower](http://bower.io/) - менеджер web-пакетов для Node.js.
 
 ```
+$ npm install -g grunt-cli
 $ npm install -g bower
 ```
 
