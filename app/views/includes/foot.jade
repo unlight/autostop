@@ -1,52 +1,58 @@
-//jQuery
-script(type='text/javascript', src='/lib/jquery/dist/jquery.js')
+if (settings.env == 'production')
+    script(type='text/javascript', src='/assets/main.min.js')
+else
+    //- <!-- build:js public/assets/main.min.js -->
+    //jQuery
+    script(type='text/javascript', src='/lib/jquery/dist/jquery.js')
 
-//Underscore
-script(type='text/javascript', src='/lib/underscore/underscore.js')
+    //Underscore
+    script(type='text/javascript', src='/lib/underscore/underscore.js')
 
-//Select2
-script(type='text/javascript', src='/lib/select2/select2.js')
+    //Select2
+    script(type='text/javascript', src='/lib/select2/select2.js')
 
-//AngularJS
-script(type='text/javascript', src='/lib/angular/angular.js')
-script(type='text/javascript', src='/lib/angular-cookies/angular-cookies.js')
-script(type='text/javascript', src='/lib/angular-resource/angular-resource.js')
-script(type='text/javascript', src='/lib/angular-route/angular-route.js')
+    //AngularJS
+    script(type='text/javascript', src='/lib/angular/angular.js')
+    script(type='text/javascript', src='/lib/angular-cookies/angular-cookies.js')
+    script(type='text/javascript', src='/lib/angular-resource/angular-resource.js')
+    script(type='text/javascript', src='/lib/angular-route/angular-route.js')
 
-//Angular UI
-script(type='text/javascript', src='/lib/angular-bootstrap/ui-bootstrap.js')
-script(type='text/javascript', src='/lib/angular-bootstrap/ui-bootstrap-tpls.js')
-script(type='text/javascript', src='/lib/angular-ui-utils/ui-utils.js')
-script(type='text/javascript', src='/lib/angular-ui-select2/src/select2.js')
+    //Angular UI
+    script(type='text/javascript', src='/lib/angular-bootstrap/ui-bootstrap.js')
+    script(type='text/javascript', src='/lib/angular-bootstrap/ui-bootstrap-tpls.js')
+    script(type='text/javascript', src='/lib/angular-ui-utils/ui-utils.js')
+    script(type='text/javascript', src='/lib/angular-ui-select2/src/select2.js')
 
-//Application Init
-script(type='text/javascript', src='/js/app.js')
-script(type='text/javascript', src='/js/config.js')
-script(type='text/javascript', src='/js/directives.js')
-script(type='text/javascript', src='/js/filters.js')
+    //Application Init
+    script(type='text/javascript', src='/js/app.js')
+    script(type='text/javascript', src='/js/config.js')
+    script(type='text/javascript', src='/js/directives.js')
+    script(type='text/javascript', src='/js/filters.js')
 
-//Application Services
-script(type='text/javascript', src='/js/services/global.js')
-script(type='text/javascript', src='/js/services/calendar.js')
-script(type='text/javascript', src='/js/services/articles.js')
-script(type='text/javascript', src='/js/services/users.js')
-script(type='text/javascript', src='/js/services/locations.js')
-script(type='text/javascript', src='/js/services/routes.js')
-script(type='text/javascript', src='/js/services/trips.js')
+    //Application Services
+    script(type='text/javascript', src='/js/services/global.js')
+    script(type='text/javascript', src='/js/services/calendar.js')
+    script(type='text/javascript', src='/js/services/articles.js')
+    script(type='text/javascript', src='/js/services/users.js')
+    script(type='text/javascript', src='/js/services/locations.js')
+    script(type='text/javascript', src='/js/services/routes.js')
+    script(type='text/javascript', src='/js/services/trips.js')
 
-//Application Controllers
-script(type='text/javascript', src='/js/controllers/articles.js')
-script(type='text/javascript', src='/js/controllers/index.js')
-script(type='text/javascript', src='/js/controllers/header.js')
-script(type='text/javascript', src='/js/controllers/signin.js')
-script(type='text/javascript', src='/js/controllers/signup.js')
-script(type='text/javascript', src='/js/controllers/routes/list.js')
-script(type='text/javascript', src='/js/controllers/routes/create.js')
-script(type='text/javascript', src='/js/controllers/routes/edit.js')
-script(type='text/javascript', src='/js/controllers/routes/delete.js')
-script(type='text/javascript', src='/js/controllers/trips.js')
-script(type='text/javascript', src='/js/init.js')
+    //Application Controllers
+    script(type='text/javascript', src='/js/controllers/articles.js')
+    script(type='text/javascript', src='/js/controllers/index.js')
+    script(type='text/javascript', src='/js/controllers/header.js')
+    script(type='text/javascript', src='/js/controllers/signin.js')
+    script(type='text/javascript', src='/js/controllers/signup.js')
+    script(type='text/javascript', src='/js/controllers/routes/list.js')
+    script(type='text/javascript', src='/js/controllers/routes/create.js')
+    script(type='text/javascript', src='/js/controllers/routes/edit.js')
+    script(type='text/javascript', src='/js/controllers/routes/delete.js')
+    script(type='text/javascript', src='/js/controllers/trips.js')
+    script(type='text/javascript', src='/js/init.js')
 
-if (process.env.NODE_ENV == 'development')
+    //- <!-- endbuild -->
+
+if (settings.env == 'development')
     //Livereload script rendered
     script(type='text/javascript', src='http://' + req.host + ':35729/livereload.js')
