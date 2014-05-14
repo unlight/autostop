@@ -10,7 +10,7 @@
                     location: '=',
                     required: '='
                 },
-                controller: function ($scope, $element, Locations) {
+                controller: ['$scope', '$element', 'Locations', function ($scope, $element, Locations) {
                     $scope.options = {
                         createSearchChoice: function (term) {
                             return { id: 0, text: term };
@@ -36,7 +36,7 @@
                             });
                         }
                     };
-                }
+                }]
             };
         });
 })();
