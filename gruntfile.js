@@ -35,7 +35,10 @@ module.exports = function(grunt) {
             all: {
                 src: ['gruntfile.js', 'server.js', 'app/**/*.js', 'public/js/**', 'test/karma/**/*.js', 'test/mocha/**/*.js'],
                 options: {
-                    jshintrc: true
+                    jshintrc: true,
+                    ignores: [
+                        'public/assets/**'
+                    ]
                 }
             }
         },
@@ -77,6 +80,29 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'test/karma/karma.conf.js'
             }
+        },
+        uglify: {
+            options: {
+                mangle: false,
+                // mangle: true,
+                // beautify: true
+            },
+            main: {
+                files: {
+                    'public/assets/main.min.js': ['public/assets/main.min.js']
+                }
+            }
+        },
+        jadeUsemin: {
+            main: {
+                options: {
+                    uglify: false,
+                    prefix: 'public/'
+                },
+                files: {
+                    src: ['app/views/**/*.jade']
+                }
+            }
         }
     });
 
@@ -88,12 +114,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-env');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-jade-usemin');
 
     //Making grunt default to force in order not to break the project.
     //grunt.option('force', true);
 
     //Default task(s).
     grunt.registerTask('default', ['jshint', 'concurrent']);
+
+    grunt.registerTask('compress', ['jadeUsemin', 'uglify']);
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'jshint', 'mochaTest', 'karma:unit']);
