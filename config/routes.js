@@ -119,8 +119,9 @@ module.exports = function (app, passport, auth) {
     app.del(apiUri('/trips/:tripId'), auth.requiresLogin, auth.trip.hasAuthorization, tripsApi.deactivate);
     app.post(apiUri('/trips/:tripId/join'), auth.requiresLogin, tripsApi.join);
     app.post(apiUri('/trips/:tripId/leave'), auth.requiresLogin, tripsApi.leave);
+    app.get(apiUri('/trips/:tripId/passengers'), auth.requiresLogin, tripsApi.getPassengers);
     app.param('tripId', tripsApi.trip);
-
+    
     //Home routes
     var index = require('../app/controllers/index');
     app.get(apiUri(), index.api);

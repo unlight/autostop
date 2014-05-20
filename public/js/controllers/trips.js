@@ -16,6 +16,11 @@
 					startMax: tomorrow
 				});
 				
+				$scope.myTrips = Trips.query({
+					startMin: new Date(),
+					passenger: Global.user._id
+				});
+				
 				$scope.isJoined = function(trip){
 					for(var i=0;i<trip.passengers.length;i++){
 						if(trip.passengers[i] === Global.user._id){
