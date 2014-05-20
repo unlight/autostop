@@ -119,6 +119,29 @@ describe('Model Trip', function () {
                 done(err);
             });
         });
+
+        it('should return passengers as Users', function (done) {
+            var userB = entity.user();
+            async.series({
+                saveUserB: function (callback) {
+                    userB.save(callback);
+                },
+                saveTrip: function (callback) {
+                    trip.save(callback);
+                },
+                joinTrip: function (callback) {
+                    trip.join(userB._id, callback);
+                },
+                getTrip: function (callback) {
+                    Trip.getPassengers(trip._id, callback);
+                }
+            }, function (err, results) {
+                var trip = results.getTrip;
+                trip.passengers.should.be.instanceOf(Array).and.have.lengthOf(1);
+                trip.passengers[0].should.be.an.instanceOf(User);
+                done(err);
+            });
+        });
     });
 
     describe('Method deactivate', function () {
@@ -462,4 +485,5 @@ describe('Model Trip', function () {
         Route.remove({});
         done();
     });
-});
+})
+;
