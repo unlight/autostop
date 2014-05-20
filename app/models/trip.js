@@ -87,6 +87,11 @@ TripSchema.methods.leave = function (passengerId, callback) {
     trip.save(callback);
 };
 
+TripSchema.statics.getPassengers = function(tripId, callback) {
+  // TODO return passengers, not trip
+    this.findById(tripId).populate('passengers').exec(callback);
+};
+
 TripSchema.statics.load = function (tripId, callback) {
     this.findById(tripId)
         .populate('creator route')

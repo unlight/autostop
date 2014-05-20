@@ -169,6 +169,39 @@ describe('Trip service', function () {
         });
     });
 
+    describe('GET /trips/:tripId/passengers', function () {
+        it('should return passengers', function (done) {
+            async.waterfall([
+                function createTrip(done) {
+                    service.trip.create(routeA.creator._id, { route: routeA._id},
+                        function (err, trip) {
+                            done(err, trip);
+                        });
+                },
+                function join(trip, done) {
+                    server.post('/api/trips/' + trip._id + '/join')
+                        .set('userId', userBId)
+                        .expect(200)
+                        .end(function (err) {
+                            done(err, trip);
+                        });
+                },
+                function getPassengers(trip, done) {
+                    server.get('/api/trips/' + trip._id + '/passengers')
+                        .set('userId', userBId)
+                        .expect(200).end(function (err, res) {
+                            done(err, res.body);
+                        });
+                }
+            ], function (err, passengers) {
+                var passenger = passengers[0];
+                passengers.should.be.instanceOf(Array).and.have.lengthOf(1);
+                passenger._id.should.equal(userBId);
+                done(err);
+            });
+        });
+    });
+
     describe('PUT /trips/:tripId', function () {
         it('should update trip without error', function (done) {
             async.waterfall([
