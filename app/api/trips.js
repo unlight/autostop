@@ -95,3 +95,12 @@ exports.trip = function (req, res, next, tripId) {
         next();
     });
 };
+
+exports.getPassengers = function(req, res) {
+    Trip.getPassengers(req.trip._id, function(err, trip) {
+        if (err || !trip) {
+            res.jsonp(500,err);
+        }
+        res.jsonp(trip.passengers);
+    });
+};

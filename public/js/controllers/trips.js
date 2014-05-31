@@ -7,7 +7,49 @@
                 $scope.trips = Trips.query({
                     creator: Global.user._id
                 });
+				
+				var tomorrow = new Date();
+				tomorrow.setDate(tomorrow.getDate()+1);
 
+				$scope.closest = Trips.query({
+					startMin: new Date(),
+					startMax: tomorrow
+				});
+				
+				$scope.myTrips = Trips.query({
+					startMin: new Date(),
+					passenger: Global.user._id
+				});
+				
+				$scope.isJoined = function(trip){
+					for(var i=0;i<trip.passengers.length;i++){
+						if(trip.passengers[i] === Global.user._id){
+							return true;
+						}
+					}
+					return false;
+				};
+				
+				$scope.isDriver = function(trip){
+					return trip.creator._id === Global.user._id;
+				};
+				
+				$scope.join = function(trip){
+					Trips.join(trip, addToPassengers);
+				};
+				
+				function addToPassengers(trip){
+					trip.passengers.push(Global.user._id);
+				}
+				
+				function removeFromPassengers(trip){
+					trip.passengers.splice(trip.passengers.indexOf(Global.user._id), 1);
+				}
+				
+				$scope.leave = function(trip){
+					Trips.leave(trip, removeFromPassengers);
+				};
+				
                 $rootScope.$on('trip-create-request', function (ev, data) {
                     $scope.create(data.route);
                 });

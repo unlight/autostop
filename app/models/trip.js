@@ -87,6 +87,11 @@ TripSchema.methods.leave = function (passengerId, callback) {
     trip.save(callback);
 };
 
+TripSchema.statics.getPassengers = function(tripId, callback) {
+  // TODO return passengers, not trip
+    this.findById(tripId).populate('passengers').exec(callback);
+};
+
 TripSchema.statics.load = function (tripId, callback) {
     this.findById(tripId)
         .populate('creator route')
@@ -95,6 +100,13 @@ TripSchema.statics.load = function (tripId, callback) {
 
 TripSchema.statics.search = function (searchData, callback) {
     var searchCriteria = {};
+    var creatorOptions = {
+        path: 'creator',
+        select: '-hashed_password -salt'
+    };
+    var routeOptions = {
+        path: 'route'
+    };
 
     if (!searchData.includeInactive) {
         searchCriteria.active = true;
@@ -106,10 +118,37 @@ TripSchema.statics.search = function (searchData, callback) {
         };
     }
 
+    if (searchData.startMax) {
+        searchCriteria.start = {
+            '$lte': new Date(searchData.startMax)
+        };
+    }
+
+    if (searchData.passenger) {
+        var passenger = searchData.passenger;
+        // if (!(passenger instanceof ObjectId)) {
+        //     passenger = new ObjectId(passenger);
+        // }
+        searchCriteria.passengers = passenger;
+    }
+
     if (searchData.creator) {
         searchCriteria.creator = searchData.creator instanceof ObjectId ?
             searchData.creator :
             new ObjectId(searchData.creator);
+    }
+
+
+    if (searchData.originLocation) {
+        var originLocation = searchData.originLocation;
+        routeOptions.match = routeOptions.match || {};
+        routeOptions.match = {origin: originLocation};
+    }
+
+    if (searchData.destinationLocation) {
+        var destinationLocation = searchData.destinationLocation;
+        routeOptions.match = routeOptions.match || {};
+        routeOptions.match = {origin: destinationLocation};
     }
 
     var sortCriteria = {};
@@ -117,7 +156,7 @@ TripSchema.statics.search = function (searchData, callback) {
 
     this.find(searchCriteria)
         .sort(sortCriteria)
-        .populate('creator route')
+        .populate([creatorOptions, routeOptions])
         .exec(callback);
 };
 

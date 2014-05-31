@@ -6,3 +6,5 @@ node_modules/
 npm-debug.log
 public/lib
 test/coverage/
+public/assets/main.min.js
+public/assets/style.min.css
