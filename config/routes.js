@@ -37,6 +37,11 @@ module.exports = function (app, passport, auth) {
         })(req, res, next);
     });
 
+    app.get(apiUri('/users/signout'), function (req, res) {
+        req.logout();
+        res.end();
+    });
+
 
     //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
