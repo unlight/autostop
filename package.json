@@ -8,6 +8,10 @@
         "type": "git",
         "url": "https://github.com/3dev/autostop.git"
     },
+    "bugs": {
+        "url": "https://github.com/3dev/autostop/issues"
+    },
+    "homepage": "https://github.com/3dev/autostop",
     "engines": {
         "node": "0.10.x",
         "npm": "1.3.x"
@@ -77,6 +81,10 @@
         "karma-phantomjs-launcher": "~0.1.0",
         "karma": "~0.10.4",
         "grunt-karma": "~0.6.2",
-        "karma-coverage": "~0.1.0"
+        "karma-coverage": "~0.1.0",
+        "grunt-contrib-uglify": "0.4.X",
+        "grunt-contrib-cssmin": "0.9.X",
+        "grunt-contrib-concat": "0.4.X",
+        "grunt-jade-usemin": "0.3.X"
     }
 }
