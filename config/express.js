@@ -7,7 +7,8 @@ var express = require('express'),
     mongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config');
+    config = require('./config'),
+    cors = require('cors');
 
 module.exports = function (app, passport, db) {
     app.set('showStackError', true);
@@ -68,6 +69,8 @@ module.exports = function (app, passport, db) {
                 var passportMock = require('./middlewares/passport-mock');
                 app.use(passportMock.authenticate);
             }
+
+            app.use(cors());
 
             //routes should be at the last
             app.use(app.router);
