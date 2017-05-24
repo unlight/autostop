@@ -1,0 +1,26 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:ms:20170412':
+    - karma > connect > connect-timeout > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > express-session > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > morgan > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > serve-index > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > body-parser > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > compression > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > connect-timeout > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > serve-static > send > debug > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > serve-static > send > ms:
+        patched: '2017-05-24T07:07:12.340Z'
+    - karma > connect > serve-favicon > ms:
+        patched: '2017-05-24T07:07:12.340Z'
