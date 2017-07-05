@@ -39,7 +39,7 @@
     "async": "~0.2.9",
     "underscore": "~1.5.2",
     "node-uuid": "~1.4.1",
-    "bower": "~1.2.8",
+    "bower": "~1.7.5",
     "grunt": "~0.4.2",
     "grunt-cli": "~0.1.11",
     "grunt-env": "~0.4.1",
